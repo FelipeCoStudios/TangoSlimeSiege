@@ -1,0 +1,163 @@
+// ─────────────────────────────────────────────────────────────
+// textures.ts — Texturas canvas para partículas/proyectiles + carga de sprites
+// ─────────────────────────────────────────────────────────────
+import * as THREE from 'three';
+
+function makeCanvas(size: number) {
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  return { c, ctx: c.getContext('2d')! };
+}
+
+function toTexture(c: HTMLCanvasElement): THREE.CanvasTexture {
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+export function starTexture(color = '#ffd93b'): THREE.CanvasTexture {
+  const { c, ctx } = makeCanvas(128);
+  ctx.translate(64, 64);
+  ctx.beginPath();
+  const spikes = 5, outer = 56, inner = 24;
+  for (let i = 0; i < spikes * 2; i++) {
+    const r = i % 2 === 0 ? outer : inner;
+    const a = (i * Math.PI) / spikes - Math.PI / 2;
+    ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+  }
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.strokeStyle = '#3a2409';
+  ctx.lineWidth = 9;
+  ctx.stroke();
+  ctx.fill();
+  // brillo
+  ctx.beginPath();
+  ctx.arc(-12, -14, 10, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.fill();
+  return toTexture(c);
+}
+
+export function circleTexture(color = '#ffffff', soft = false): THREE.CanvasTexture {
+  const { c, ctx } = makeCanvas(64);
+  if (soft) {
+    const g = ctx.createRadialGradient(32, 32, 2, 32, 32, 30);
+    g.addColorStop(0, color);
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g;
+  } else {
+    ctx.fillStyle = color;
+  }
+  ctx.beginPath();
+  ctx.arc(32, 32, 28, 0, Math.PI * 2);
+  ctx.fill();
+  return toTexture(c);
+}
+
+export function coinTexture(): THREE.CanvasTexture {
+  const { c, ctx } = makeCanvas(96);
+  ctx.translate(48, 48);
+  ctx.beginPath();
+  ctx.arc(0, 0, 40, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffcf3d';
+  ctx.strokeStyle = '#8a5a00';
+  ctx.lineWidth = 8;
+  ctx.stroke();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(0, 0, 26, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffe27a';
+  ctx.fill();
+  ctx.fillStyle = '#8a5a00';
+  ctx.font = 'bold 34px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('$', 0, 2);
+  return toTexture(c);
+}
+
+export function arrowTexture(): THREE.CanvasTexture {
+  const c = document.createElement('canvas');
+  c.width = 128;
+  c.height = 32;
+  const ctx = c.getContext('2d')!;
+  ctx.lineWidth = 5;
+  ctx.strokeStyle = '#5b3a1e';
+  // astil
+  ctx.beginPath();
+  ctx.moveTo(18, 16);
+  ctx.lineTo(104, 16);
+  ctx.stroke();
+  // punta
+  ctx.beginPath();
+  ctx.moveTo(104, 6);
+  ctx.lineTo(124, 16);
+  ctx.lineTo(104, 26);
+  ctx.closePath();
+  ctx.fillStyle = '#9aa5ad';
+  ctx.strokeStyle = '#3a2409';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  ctx.fill();
+  // plumas
+  ctx.beginPath();
+  ctx.moveTo(16, 16);
+  ctx.lineTo(2, 6);
+  ctx.lineTo(8, 16);
+  ctx.lineTo(2, 26);
+  ctx.closePath();
+  ctx.fillStyle = '#ff5a5a';
+  ctx.fill();
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+export function snowflakeTexture(): THREE.CanvasTexture {
+  const { c, ctx } = makeCanvas(96);
+  ctx.translate(48, 48);
+  ctx.strokeStyle = '#bfeaff';
+  ctx.lineWidth = 7;
+  ctx.lineCap = 'round';
+  ctx.shadowColor = '#4db8ff';
+  ctx.shadowBlur = 10;
+  for (let i = 0; i < 6; i++) {
+    ctx.rotate(Math.PI / 3);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, -38);
+    ctx.moveTo(0, -24);
+    ctx.lineTo(-10, -32);
+    ctx.moveTo(0, -24);
+    ctx.lineTo(10, -32);
+    ctx.stroke();
+  }
+  return toTexture(c);
+}
+
+// ── Carga de sprites de personajes (PNG generados) ──────────
+export type SpriteKey = 'slime' | 'goblin' | 'mushroom' | 'golem' | 'archer' | 'cannon' | 'frost';
+
+export async function loadCharacterTextures(): Promise<Record<SpriteKey, THREE.Texture>> {
+  const loader = new THREE.TextureLoader();
+  const keys: SpriteKey[] = ['slime', 'goblin', 'mushroom', 'golem', 'archer', 'cannon', 'frost'];
+  const entries = await Promise.all(
+    keys.map(
+      (k) =>
+        new Promise<[SpriteKey, THREE.Texture]>((resolve, reject) => {
+          loader.load(
+            `${import.meta.env.BASE_URL}sprites/${k}.png`,
+            (t) => {
+              t.colorSpace = THREE.SRGBColorSpace;
+              t.anisotropy = 4;
+              resolve([k, t]);
+            },
+            undefined,
+            reject,
+          );
+        }),
+    ),
+  );
+  return Object.fromEntries(entries) as Record<SpriteKey, THREE.Texture>;
+}

@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Slime Siege",
+      "hasCanvas": false,
+      "bodyTextLen": 156,
+      "bodyTextHash": "644580ef1ea0795bbcfc2292888398c0c02b8c3c53940488ae0f766dfaddf26f",
+      "bodyTextPrefix": "SLIME SIEGE Defensa de torres del Reino Gelatina Cargando… Coloc",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Slime Siege",
+      "hasCanvas": false,
+      "bodyTextLen": 156,
+      "bodyTextHash": "644580ef1ea0795bbcfc2292888398c0c02b8c3c53940488ae0f766dfaddf26f",
+      "bodyTextPrefix": "SLIME SIEGE Defensa de torres del Reino Gelatina Cargando… Coloc",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}
