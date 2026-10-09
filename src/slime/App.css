@@ -417,24 +417,89 @@ body,
   transform: translate(0, 6px);
 }
 
-/* ── Barra de torres ── */
-.tower-bar {
+/* ── Selector de torres con navegación visible ── */
+.tower-selector {
   position: absolute;
   bottom: max(10px, env(safe-area-inset-bottom));
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
   z-index: 10;
+  box-sizing: border-box;
   display: flex;
-  gap: 10px;
-  padding: 4px 10px 8px;
-  width: min(1200px, 100vw);
-  max-width: 100vw;
-  overflow-x: auto;
-  justify-content: flex-start;
-  scrollbar-width: none;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 8px 8px;
+  pointer-events: none;
 }
 
-.tower-bar::-webkit-scrollbar { display: none; }
+.tower-bar {
+  position: relative;
+  left: auto;
+  bottom: auto;
+  transform: none;
+  z-index: auto;
+  display: flex;
+  flex: 1 1 auto;
+  gap: 10px;
+  min-width: 0;
+  padding: 4px 10px 12px;
+  width: auto;
+  max-width: none;
+  overflow-x: auto;
+  justify-content: flex-start;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink) rgba(255, 246, 223, 0.75);
+  pointer-events: auto;
+  overscroll-behavior-x: contain;
+}
+
+.tower-bar::-webkit-scrollbar { height: 7px; }
+.tower-bar::-webkit-scrollbar-track { background: rgba(255, 246, 223, 0.75); border-radius: 8px; }
+.tower-bar::-webkit-scrollbar-thumb { background: var(--ink); border-radius: 8px; }
+
+.tower-scroll-btn {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  background: var(--yellow);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 4px 0 rgba(58, 36, 9, 0.9);
+  cursor: pointer;
+  touch-action: manipulation;
+  pointer-events: auto;
+}
+
+.tower-scroll-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 rgba(58, 36, 9, 0.9);
+}
+
+.tower-scroll-hint {
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  transform: translate(-50%, -100%);
+  padding: 3px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  background: var(--cream);
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+}
 
 .tower-card {
   flex: 0 0 auto;
