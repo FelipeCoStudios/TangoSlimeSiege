@@ -1,0 +1,11 @@
+normal
+sneaker
+boxer
+sunflower
+mummy
+bard
+bubble
+firemage
+crystal
+electrician
+mecha

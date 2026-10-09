@@ -188,13 +188,13 @@ export class GameEngine {
   private showGhost(pad: PadMesh, type: string) {
     const def = TOWERS[type];
     if (!this.ghost) {
-      this.ghost = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.chars[def.key as SpriteKey], transparent: true, opacity: 0.6, depthWrite: false }));
+      this.ghost = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.chars[def.sprite ?? def.key], transparent: true, opacity: 0.6, depthWrite: false }));
       this.ghost.center.set(0.5, 0); this.ghost.scale.setScalar(2.4);
       this.ghostRing = new THREE.Mesh(new THREE.RingGeometry(def.range - 0.15, def.range, 48), new THREE.MeshBasicMaterial({ color: new THREE.Color(def.color), transparent: true, opacity: 0.35, side: THREE.DoubleSide, depthWrite: false }));
       this.ghostRing.rotation.x = -Math.PI / 2;
       this.world.scene.add(this.ghost, this.ghostRing);
     }
-    this.ghost.material.map = this.chars[def.key as SpriteKey];
+    this.ghost.material.map = this.chars[def.sprite ?? def.key];
     this.ghost.position.copy(pad.position).setY(0.9);
     this.ghostRing!.position.copy(pad.position).setY(0.09);
     this.ghost.visible = true; this.ghostRing!.visible = true;

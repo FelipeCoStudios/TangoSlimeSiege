@@ -137,11 +137,24 @@ export function snowflakeTexture(): THREE.CanvasTexture {
 }
 
 // ── Carga de sprites de personajes (PNG generados) ──────────
-export type SpriteKey = 'slime' | 'goblin' | 'mushroom' | 'golem' | 'archer' | 'cannon' | 'frost';
+// Sprites propios por tropa (dog_*.png); se mapean a las claves genéricas
+// de proyectil (archer/cannon/frost) para conservar el sistema actual.
+export type SpriteKey =
+  | 'slime' | 'goblin' | 'mushroom' | 'golem' | 'archer' | 'cannon' | 'frost'
+  | 'dog_normal' | 'dog_sneaker' | 'dog_boxer' | 'dog_sunflower' | 'dog_mummy'
+  | 'dog_bard' | 'dog_bubble' | 'dog_firemage' | 'dog_crystal' | 'dog_electrician' | 'dog_mecha';
+
+const TOWER_SPRITE_FILES: Record<string, string> = {
+  archer: 'dog_normal', cannon: 'dog_boxer', frost: 'dog_bard',
+};
 
 export async function loadCharacterTextures(): Promise<Record<SpriteKey, THREE.Texture>> {
   const loader = new THREE.TextureLoader();
-  const keys: SpriteKey[] = ['slime', 'goblin', 'mushroom', 'golem', 'archer', 'cannon', 'frost'];
+  const keys: SpriteKey[] = [
+    'slime', 'goblin', 'mushroom', 'golem', 'archer', 'cannon', 'frost',
+    'dog_normal', 'dog_sneaker', 'dog_boxer', 'dog_sunflower', 'dog_mummy',
+    'dog_bard', 'dog_bubble', 'dog_firemage', 'dog_crystal', 'dog_electrician', 'dog_mecha',
+  ];
   const entries = await Promise.all(
     keys.map(
       (k) =>
@@ -159,5 +172,10 @@ export async function loadCharacterTextures(): Promise<Record<SpriteKey, THREE.T
         }),
     ),
   );
-  return Object.fromEntries(entries) as Record<SpriteKey, THREE.Texture>;
+  const map = Object.fromEntries(entries) as Record<SpriteKey, THREE.Texture>;
+  // Las claves genéricas de proyectil reutilizan el sprite de la tropa correspondiente.
+  for (const [generic, dog] of Object.entries(TOWER_SPRITE_FILES)) {
+    map[generic as SpriteKey] = map[dog as SpriteKey];
+  }
+  return map;
 }
