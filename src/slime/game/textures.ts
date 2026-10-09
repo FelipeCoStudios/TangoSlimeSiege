@@ -137,11 +137,19 @@ export function snowflakeTexture(): THREE.CanvasTexture {
 }
 
 // ── Carga de sprites de personajes (PNG generados) ──────────
-export type SpriteKey = 'slime' | 'goblin' | 'mushroom' | 'golem' | 'archer' | 'cannon' | 'frost';
+export type SpriteKey =
+  | 'slime' | 'goblin' | 'mushroom' | 'golem'
+  | 'archer' | 'cannon' | 'frost'
+  | 'dog_runner' | 'dog_flower' | 'dog_boxer' | 'dog_bard' | 'dog_mage'
+  | 'dog_bubble' | 'dog_cyborg' | 'dog_star' | 'dog_mummy' | 'dog_worker';
 
 export async function loadCharacterTextures(): Promise<Record<SpriteKey, THREE.Texture>> {
   const loader = new THREE.TextureLoader();
-  const keys: SpriteKey[] = ['slime', 'goblin', 'mushroom', 'golem', 'archer', 'cannon', 'frost'];
+  const keys: SpriteKey[] = [
+    'slime', 'goblin', 'mushroom', 'golem', 'archer', 'cannon', 'frost',
+    'dog_runner', 'dog_flower', 'dog_boxer', 'dog_bard', 'dog_mage',
+    'dog_bubble', 'dog_cyborg', 'dog_star', 'dog_mummy', 'dog_worker',
+  ];
   const entries = await Promise.all(
     keys.map(
       (k) =>
