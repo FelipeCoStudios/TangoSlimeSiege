@@ -82,9 +82,9 @@ export default function App() {
             </h1>
             <p className="game-subtitle">Defensa de torres del Reino Gelatina</p>
             <div className="menu-chars">
-              <img src={SPRITE('archer')} alt="Normal Dog" />
+              <img src={SPRITE('normaldog')} alt="Normal Dog" />
               <img src={SPRITE('slime')} alt="Slime" />
-              <img src={SPRITE('frost')} alt="Bard Dog" />
+              <img src={SPRITE('firemage')} alt="Fire Mage Dog" />
             </div>
             <button className="btn-3d btn-play" onClick={begin} disabled={!ready}>
               {ready ? '¡JUGAR!' : 'Cargando…'}

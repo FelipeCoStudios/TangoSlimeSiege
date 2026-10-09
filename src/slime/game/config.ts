@@ -45,6 +45,7 @@ export interface TowerDef {
 }
 
 export const TOWERS: Record<string, TowerDef> = {
+  // Torres originales: se conservan para no cambiar las partidas existentes.
   archer: {
     key: 'archer', name: 'Gato Arquero', desc: 'Rápido y barato', cost: 50,
     dmg: 9, rate: 1.8, range: 6.8, color: '#ffb84d',
@@ -57,9 +58,24 @@ export const TOWERS: Record<string, TowerDef> = {
     key: 'frost', name: 'Pingüino Mago', desc: 'Ralentiza enemigos', cost: 70,
     dmg: 5, rate: 1.1, range: 6.2, slow: { factor: 0.5, duration: 1.6 }, color: '#7fd8ff',
   },
+  normaldog: { key: 'normaldog', name: 'Normal Dog', desc: 'Unidad inicial económica', cost: 50, dmg: 24, rate: 1 / 1.8, range: 4, color: '#d8d8d8' },
+  sneaker: { key: 'sneaker', name: 'Sneaker Dog', desc: 'Cada quinto golpe hace daño crítico', cost: 100, dmg: 36, rate: 1 / 1.2, range: 4, color: '#ffb84d' },
+  boxer: { key: 'boxer', name: 'Boxer Dog', desc: '20% de probabilidad de aturdir', cost: 150, dmg: 105, rate: 1 / 2.8, range: 2.5, color: '#e76b55' },
+  sunflower: { key: 'sunflower', name: 'Sunflower Dog', desc: 'Genera 15 monedas cada 10 segundos', cost: 175, dmg: 15, rate: 1 / 2.5, range: 5, color: '#f5d547' },
+  bard: { key: 'bard', name: 'Bard Dog', desc: 'Aumenta 15% la velocidad de ataque cercana', cost: 250, dmg: 24, rate: 1 / 2.2, range: 6, color: '#b77bdf' },
+  bubble: { key: 'bubble', name: 'Bubble Dog', desc: 'Cada cuarto ataque inmoviliza brevemente', cost: 300, dmg: 45, rate: 1 / 3.2, range: 5, color: '#71d9ef' },
+  firemage: { key: 'firemage', name: 'Fire Mage Dog', desc: 'Daño en área y quemadura', cost: 350, dmg: 165, rate: 1 / 3.8, range: 7, splash: 1.8, color: '#ff653b' },
+  crystal: { key: 'crystal', name: 'Crystal Dog', desc: 'Ralentiza a los enemigos', cost: 400, dmg: 90, rate: 1 / 2.8, range: 6, slow: { factor: 0.65, duration: 2 }, color: '#7fd8ff' },
+  electrician: { key: 'electrician', name: 'Electrician Dog', desc: 'El rayo rebota hasta a 3 enemigos', cost: 500, dmg: 120, rate: 1 / 2.5, range: 7, color: '#ffe45e' },
+  mecha: { key: 'mecha', name: 'Mecha Dog', desc: 'Cada cuarto ataque dispara dos proyectiles', cost: 750, dmg: 330, rate: 1 / 4.5, range: 9, splash: 0.8, color: '#8ba5bb' },
+  mummy: { key: 'mummy', name: 'Mummy Dog', desc: 'Reduce 50% la velocidad del objetivo', cost: 225, dmg: 60, rate: 1 / 3, range: 5, slow: { factor: 0.5, duration: 1.5 }, color: '#c9bd8c' },
 };
 
-export const TOWER_ORDER = ['archer', 'cannon', 'frost'] as const;
+export const TOWER_ORDER = [
+  'archer', 'cannon', 'frost',
+  'normaldog', 'sneaker', 'boxer', 'sunflower', 'bard', 'bubble',
+  'firemage', 'crystal', 'electrician', 'mecha', 'mummy',
+] as const;
 
 export function upgradeCost(def: TowerDef, level: number): number {
   // level actual 1→2 o 2→3

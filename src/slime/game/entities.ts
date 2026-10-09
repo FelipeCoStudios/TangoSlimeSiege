@@ -31,6 +31,7 @@ export class Enemy {
   defKey: string; hp: number; maxHp: number; dist = 0; alive = true;
   sprite: THREE.Sprite; shadow: THREE.Mesh; hpBg: THREE.Sprite; hpFg: THREE.Sprite;
   phase = Math.random() * Math.PI * 2; slowUntil = 0; flash = 0; squash = 0;
+  burnUntil = 0; burnTick = 0;
   lastDirX = 1; time = 0; slowFactor = 1;
   constructor(defKey: string, scaleHp: number, chars: Record<SpriteKey, THREE.Texture>) {
     this.defKey = defKey;
@@ -105,6 +106,7 @@ export class Tower {
   id = towerIdCounter++; level = 1; cooldown = 0; invested: number;
   group = new THREE.Group(); sprite: THREE.Sprite; rangeRing: THREE.Mesh;
   pad: PadMesh; lastDirX = 1; popAnim = 0; defKey: string;
+  shotsFired = 0; incomeTimer = 0;
   constructor(defKey: string, pad: PadMesh, chars: Record<SpriteKey, THREE.Texture>) {
     this.defKey = defKey; this.pad = pad;
     const def = this.def; this.invested = def.cost;
@@ -133,5 +135,7 @@ export class Tower {
 export interface Projectile {
   kind: 'arrow' | 'ball' | 'frost'; sprite: THREE.Sprite; from: THREE.Vector3; to: THREE.Vector3;
   target: Enemy | null; t: number; duration: number; dmg: number; splash?: number;
-  slow?: { factor: number; duration: number }; alive: boolean;
+  slow?: { factor: number; duration: number };
+  towerKey?: string; towerId?: number; shotNumber?: number;
+  alive: boolean;
 }
