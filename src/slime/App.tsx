@@ -82,9 +82,9 @@ export default function App() {
             </h1>
             <p className="game-subtitle">Defensa de torres del Reino Gelatina</p>
             <div className="menu-chars">
-              <img src={SPRITE('archer')} alt="Gato Arquero" />
+              <img src={SPRITE('archer')} alt="Normal Dog" />
               <img src={SPRITE('slime')} alt="Slime" />
-              <img src={SPRITE('frost')} alt="Pingüino Mago" />
+              <img src={SPRITE('frost')} alt="Bard Dog" />
             </div>
             <button className="btn-3d btn-play" onClick={begin} disabled={!ready}>
               {ready ? '¡JUGAR!' : 'Cargando…'}
@@ -98,7 +98,6 @@ export default function App() {
 
       {started && stats && (
         <>
-          {/* Barra superior */}
           <div className="hud-top">
             <div className="hud-group">
               <div className="hud-pill hud-lives">
@@ -146,18 +145,16 @@ export default function App() {
             </div>
           </div>
 
-          {/* Botón de oleada */}
           {!waveInProgress && !gameOver && !victory && (
             <button className="btn-3d btn-wave pulse" onClick={() => engineRef.current?.startWave(stats.wave > 0)}>
               {stats.wave === 0 ? '¡Empezar Oleada 1!' : `¡Oleada ${stats.wave + 1}!`}
             </button>
           )}
 
-          {/* Popup de torre seleccionada */}
-          {towerInfo && (
+          {towerInfo && TOWERS[towerInfo.type] && (
             <div className="tower-popup">
               <div className="tower-popup-head">
-                <img src={SPRITE(towerInfo.type)} alt={TOWERS[towerInfo.type].name} />
+                <img src={SPRITE(TOWERS[towerInfo.type].key)} alt={TOWERS[towerInfo.type].name} />
                 <div>
                   <strong>{TOWERS[towerInfo.type].name}</strong>
                   <span className="tower-popup-sub">
@@ -184,7 +181,6 @@ export default function App() {
             </div>
           )}
 
-          {/* Barra de torres */}
           <div className="tower-bar">
             {TOWER_ORDER.map((key) => {
               const def = TOWERS[key];
@@ -212,7 +208,6 @@ export default function App() {
 
           {toast && <div className="toast">{toast}</div>}
 
-          {/* Victoria */}
           {victory && !gameOver && (
             <div className="end-screen">
               <div className="end-panel victory-panel">
@@ -220,10 +215,7 @@ export default function App() {
                 <p>Has defendido el Reino Gelatina durante {VICTORY_WAVE} oleadas.</p>
                 <img className="end-img" src={SPRITE('golem')} alt="Gólem derrotado" />
                 <div className="end-actions">
-                  <button
-                    className="btn-3d btn-play"
-                    onClick={() => engineRef.current?.continueEndless()}
-                  >
+                  <button className="btn-3d btn-play" onClick={() => engineRef.current?.continueEndless()}>
                     Modo Infinito ∞
                   </button>
                   <button className="btn-3d btn-secondary" onClick={() => engineRef.current?.restart()}>
@@ -234,7 +226,6 @@ export default function App() {
             </div>
           )}
 
-          {/* Derrota */}
           {gameOver && (
             <div className="end-screen">
               <div className="end-panel">
