@@ -33,26 +33,60 @@ export interface TowerDef {
   color: string;
 }
 
-// Stats: daño ×3 respecto al original; cooldown → rate = 1/cooldown
+// Daño ×3 del base original; rate = 1/cooldown (s)
 export const TOWERS: Record<string, TowerDef> = {
-  archer: {
-    key: 'archer', name: 'Normal Dog', desc: 'Rápido y barato', cost: 50,
+  normal: {
+    key: 'normal', name: 'Normal Dog', desc: 'Rápido y barato', cost: 50,
     dmg: 24, rate: 1 / 1.8, range: 4, color: '#ffb84d',
   },
-  cannon: {
-    key: 'cannon', name: 'Boxer Dog', desc: 'Daño alto, corto alcance', cost: 150,
-    dmg: 105, rate: 1 / 2.8, range: 2.5, splash: 2.3, color: '#7ddb52',
+  sneaker: {
+    key: 'sneaker', name: 'Sneaker Dog', desc: 'Ataque veloz', cost: 100,
+    dmg: 36, rate: 1 / 1.2, range: 4, color: '#a0e0ff',
   },
-  frost: {
-    key: 'frost', name: 'Sneaker Dog', desc: 'Rápido y preciso', cost: 100,
-    dmg: 36, rate: 1 / 1.2, range: 4, slow: { factor: 0.5, duration: 1.6 }, color: '#7fd8ff',
+  boxer: {
+    key: 'boxer', name: 'Boxer Dog', desc: 'Golpe fuerte corto', cost: 150,
+    dmg: 105, rate: 1 / 2.8, range: 2.5, splash: 1.8, color: '#7ddb52',
+  },
+  sunflower: {
+    key: 'sunflower', name: 'Sunflower Dog', desc: 'Daño bajo, gran rango', cost: 175,
+    dmg: 15, rate: 1 / 2.5, range: 5, color: '#ffe066',
+  },
+  mummy: {
+    key: 'mummy', name: 'Mummy Dog', desc: 'Ataque medio', cost: 225,
+    dmg: 60, rate: 1 / 3.0, range: 5, color: '#c4a882',
+  },
+  bard: {
+    key: 'bard', name: 'Bard Dog', desc: 'Rango amplio', cost: 250,
+    dmg: 24, rate: 1 / 2.2, range: 6, slow: { factor: 0.6, duration: 1.2 }, color: '#d4a0ff',
+  },
+  bubble: {
+    key: 'bubble', name: 'Bubble Dog', desc: 'Salpicadura', cost: 300,
+    dmg: 45, rate: 1 / 3.2, range: 5, splash: 2.2, color: '#7fd8ff',
+  },
+  firemage: {
+    key: 'firemage', name: 'Fire Mage Dog', desc: 'Alto daño', cost: 350,
+    dmg: 165, rate: 1 / 3.8, range: 7, color: '#ff6b4a',
+  },
+  crystal: {
+    key: 'crystal', name: 'Crystal Dog', desc: 'Precisión media', cost: 400,
+    dmg: 90, rate: 1 / 2.8, range: 6, color: '#b8f0ff',
+  },
+  electrician: {
+    key: 'electrician', name: 'Electrician Dog', desc: 'Cadena rápida', cost: 500,
+    dmg: 120, rate: 1 / 2.5, range: 7, color: '#ffe27a',
+  },
+  mecha: {
+    key: 'mecha', name: 'Mecha Dog', desc: 'Megadaño', cost: 750,
+    dmg: 330, rate: 1 / 4.5, range: 9, splash: 2.5, color: '#9aa4b2',
   },
 };
 
-export const TOWER_ORDER = ['archer', 'cannon', 'frost'] as const;
+export const TOWER_ORDER = [
+  'normal', 'sneaker', 'boxer', 'sunflower', 'mummy',
+  'bard', 'bubble', 'firemage', 'crystal', 'electrician', 'mecha',
+] as const;
 
 export function upgradeCost(def: TowerDef, level: number): number {
-  // level actual 1→2 o 2→3
   return Math.round(def.cost * (level === 1 ? 0.8 : 1.2));
 }
 
@@ -64,7 +98,6 @@ export const VICTORY_WAVE = 15;
 
 export interface WaveEntry { type: string; count: number }
 
-/** Composición de la oleada n (1-indexed). */
 export function waveComposition(n: number): WaveEntry[] {
   const out: WaveEntry[] = [];
   const slime = 4 + Math.ceil(n * 1.6);
@@ -75,7 +108,6 @@ export function waveComposition(n: number): WaveEntry[] {
   return out;
 }
 
-/** Multiplicador de vida por oleada. */
 export function hpScale(n: number): number {
   return 1 + (n - 1) * 0.28 + Math.max(0, n - 10) * 0.15;
 }
@@ -84,7 +116,6 @@ export function spawnInterval(n: number): number {
   return Math.max(0.42, 0.95 - n * 0.03);
 }
 
-/** Oro extra por adelantar la oleada. */
 export function earlyWaveBonus(n: number): number {
   return 10 + n * 2;
 }
