@@ -1,0 +1,17 @@
+{
+ "pairs": {
+  "normal": "31_(5)",
+  "sneaker": "31_(1)",
+  "boxer": "31_(3)",
+  "mummy": "32_(3)",
+  "bard": "31_(6)",
+  "bubble": "32_(2)",
+  "firemage": "32",
+  "crystal": "32_(1)",
+  "electrician": "31_(2)",
+  "mecha": "31"
+ },
+ "unassigned": [
+  "sunflower"
+ ]
+}

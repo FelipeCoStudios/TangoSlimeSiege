@@ -22,6 +22,7 @@ export const ENEMIES: Record<string, EnemyDef> = {
 
 export interface TowerDef {
   key: SpriteKey;
+  sprite: SpriteKey; // sprite propio de la tropa (dog_*)
   name: string;
   desc: string;
   cost: number;
@@ -33,50 +34,50 @@ export interface TowerDef {
   color: string;
 }
 
-// key = sprite (archer/cannon/frost) for projectile type; rate = 1/cooldown
+// key = tipo de proyectil (archer/cannon/frost); sprite = imagen propia; rate = 1/cooldown
 export const TOWERS: Record<string, TowerDef> = {
   normal: {
-    key: 'archer', name: 'Normal Dog', desc: 'Rápido y barato', cost: 50,
+    key: 'archer', sprite: 'dog_normal', name: 'Normal Dog', desc: 'Rápido y barato', cost: 50,
     dmg: 24, rate: 1 / 1.8, range: 4, color: '#ffb84d',
   },
   sneaker: {
-    key: 'archer', name: 'Sneaker Dog', desc: 'Ataque veloz', cost: 100,
+    key: 'archer', sprite: 'dog_sneaker', name: 'Sneaker Dog', desc: 'Ataque veloz', cost: 100,
     dmg: 36, rate: 1 / 1.2, range: 4, color: '#a0e0ff',
   },
   boxer: {
-    key: 'cannon', name: 'Boxer Dog', desc: 'Golpe fuerte corto', cost: 150,
+    key: 'cannon', sprite: 'dog_boxer', name: 'Boxer Dog', desc: 'Golpe fuerte corto', cost: 150,
     dmg: 105, rate: 1 / 2.8, range: 2.5, splash: 1.8, color: '#7ddb52',
   },
   sunflower: {
-    key: 'archer', name: 'Sunflower Dog', desc: 'Daño bajo, gran rango', cost: 175,
+    key: 'archer', sprite: 'dog_sunflower', name: 'Sunflower Dog', desc: 'Daño bajo, gran rango', cost: 175,
     dmg: 15, rate: 1 / 2.5, range: 5, color: '#ffe066',
   },
   mummy: {
-    key: 'archer', name: 'Mummy Dog', desc: 'Ataque medio', cost: 225,
+    key: 'archer', sprite: 'dog_mummy', name: 'Mummy Dog', desc: 'Ataque medio', cost: 225,
     dmg: 60, rate: 1 / 3.0, range: 5, color: '#c4a882',
   },
   bard: {
-    key: 'frost', name: 'Bard Dog', desc: 'Rango amplio', cost: 250,
+    key: 'frost', sprite: 'dog_bard', name: 'Bard Dog', desc: 'Rango amplio', cost: 250,
     dmg: 24, rate: 1 / 2.2, range: 6, slow: { factor: 0.6, duration: 1.2 }, color: '#d4a0ff',
   },
   bubble: {
-    key: 'cannon', name: 'Bubble Dog', desc: 'Salpicadura', cost: 300,
+    key: 'cannon', sprite: 'dog_bubble', name: 'Bubble Dog', desc: 'Salpicadura', cost: 300,
     dmg: 45, rate: 1 / 3.2, range: 5, splash: 2.2, color: '#7fd8ff',
   },
   firemage: {
-    key: 'archer', name: 'Fire Mage Dog', desc: 'Alto daño', cost: 350,
+    key: 'archer', sprite: 'dog_firemage', name: 'Fire Mage Dog', desc: 'Alto daño', cost: 350,
     dmg: 165, rate: 1 / 3.8, range: 7, color: '#ff6b4a',
   },
   crystal: {
-    key: 'archer', name: 'Crystal Dog', desc: 'Precisión media', cost: 400,
+    key: 'archer', sprite: 'dog_crystal', name: 'Crystal Dog', desc: 'Precisión media', cost: 400,
     dmg: 90, rate: 1 / 2.8, range: 6, color: '#b8f0ff',
   },
   electrician: {
-    key: 'archer', name: 'Electrician Dog', desc: 'Cadena rápida', cost: 500,
+    key: 'archer', sprite: 'dog_electrician', name: 'Electrician Dog', desc: 'Cadena rápida', cost: 500,
     dmg: 120, rate: 1 / 2.5, range: 7, color: '#ffe27a',
   },
   mecha: {
-    key: 'cannon', name: 'Mecha Dog', desc: 'Megadaño', cost: 750,
+    key: 'cannon', sprite: 'dog_mecha', name: 'Mecha Dog', desc: 'Megadaño', cost: 750,
     dmg: 330, rate: 1 / 4.5, range: 9, splash: 2.5, color: '#9aa4b2',
   },
 };

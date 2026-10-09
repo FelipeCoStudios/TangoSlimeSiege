@@ -154,7 +154,7 @@ export default function App() {
           {towerInfo && TOWERS[towerInfo.type] && (
             <div className="tower-popup">
               <div className="tower-popup-head">
-                <img src={SPRITE(TOWERS[towerInfo.type].key)} alt={TOWERS[towerInfo.type].name} />
+                <img src={SPRITE(TOWERS[towerInfo.type].sprite)} alt={TOWERS[towerInfo.type].name} />
                 <div>
                   <strong>{TOWERS[towerInfo.type].name}</strong>
                   <span className="tower-popup-sub">
@@ -191,7 +191,7 @@ export default function App() {
                   className={`tower-card ${selectedType === key ? 'selected' : ''} ${affordable ? '' : 'cant-afford'}`}
                   onClick={() => pickTower(key)}
                 >
-                  <img src={SPRITE(def.key)} alt={def.name} draggable={false} />
+                  <img src={SPRITE(def.sprite)} alt={def.name} draggable={false} />
                   <div className="tower-card-info">
                     <strong>{def.name}</strong>
                     <span className="tower-desc">{def.desc}</span>

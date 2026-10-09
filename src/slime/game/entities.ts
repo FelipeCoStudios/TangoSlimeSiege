@@ -112,7 +112,7 @@ export class Tower {
     base.position.y = 0.4; base.castShadow = true; base.userData.towerId = this.id;
     const trim = new THREE.Mesh(new THREE.CylinderGeometry(1.0, 1.0, 0.18, 12), new THREE.MeshLambertMaterial({ color: new THREE.Color(def.color) }));
     trim.position.y = 0.82; trim.userData.towerId = this.id;
-    this.sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: chars[def.key as SpriteKey], transparent: true, depthWrite: false }));
+    this.sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: chars[def.sprite ?? def.key], transparent: true, depthWrite: false }));
     this.sprite.center.set(0.5, 0); this.sprite.scale.setScalar(2.4); this.sprite.position.y = 0.9; this.sprite.userData.towerId = this.id;
     this.group.add(base, trim, this.sprite);
     this.group.position.copy(pad.position).setY(0);
