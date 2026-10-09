@@ -26,25 +26,26 @@ export interface TowerDef {
   desc: string;
   cost: number;
   dmg: number;
-  rate: number; // disparos/seg
+  rate: number; // disparos/seg (= 1 / cooldown)
   range: number;
   splash?: number;
   slow?: { factor: number; duration: number };
   color: string;
 }
 
+// Stats: daño ×3 respecto al original; cooldown → rate = 1/cooldown
 export const TOWERS: Record<string, TowerDef> = {
   archer: {
-    key: 'archer', name: 'Gato Arquero', desc: 'Rápido y barato', cost: 50,
-    dmg: 9, rate: 1.8, range: 6.8, color: '#ffb84d',
+    key: 'archer', name: 'Normal Dog', desc: 'Rápido y barato', cost: 50,
+    dmg: 24, rate: 1 / 1.8, range: 4, color: '#ffb84d',
   },
   cannon: {
-    key: 'cannon', name: 'Rana Cañón', desc: 'Daño en área', cost: 90,
-    dmg: 26, rate: 0.6, range: 5.6, splash: 2.3, color: '#7ddb52',
+    key: 'cannon', name: 'Boxer Dog', desc: 'Daño alto, corto alcance', cost: 150,
+    dmg: 105, rate: 1 / 2.8, range: 2.5, splash: 2.3, color: '#7ddb52',
   },
   frost: {
-    key: 'frost', name: 'Pingüino Mago', desc: 'Ralentiza enemigos', cost: 70,
-    dmg: 5, rate: 1.1, range: 6.2, slow: { factor: 0.5, duration: 1.6 }, color: '#7fd8ff',
+    key: 'frost', name: 'Sneaker Dog', desc: 'Rápido y preciso', cost: 100,
+    dmg: 36, rate: 1 / 1.2, range: 4, slow: { factor: 0.5, duration: 1.6 }, color: '#7fd8ff',
   },
 };
 
