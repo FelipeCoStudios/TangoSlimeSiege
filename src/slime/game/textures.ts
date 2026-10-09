@@ -141,7 +141,9 @@ export type SpriteKey =
   | 'slime' | 'goblin' | 'mushroom' | 'golem'
   | 'archer' | 'cannon' | 'frost'
   | 'dog_runner' | 'dog_flower' | 'dog_boxer' | 'dog_bard' | 'dog_mage'
-  | 'dog_bubble' | 'dog_cyborg' | 'dog_star' | 'dog_mummy' | 'dog_worker';
+  | 'dog_bubble' | 'dog_cyborg' | 'dog_star' | 'dog_mummy' | 'dog_worker'
+  | 'normaldog' | 'sneaker' | 'boxer' | 'sunflower' | 'bard' | 'bubble'
+  | 'firemage' | 'crystal' | 'electrician' | 'mecha' | 'mummy';
 
 export async function loadCharacterTextures(): Promise<Record<SpriteKey, THREE.Texture>> {
   const loader = new THREE.TextureLoader();
@@ -149,6 +151,8 @@ export async function loadCharacterTextures(): Promise<Record<SpriteKey, THREE.T
     'slime', 'goblin', 'mushroom', 'golem', 'archer', 'cannon', 'frost',
     'dog_runner', 'dog_flower', 'dog_boxer', 'dog_bard', 'dog_mage',
     'dog_bubble', 'dog_cyborg', 'dog_star', 'dog_mummy', 'dog_worker',
+    'normaldog', 'sneaker', 'boxer', 'sunflower', 'bard', 'bubble',
+    'firemage', 'crystal', 'electrician', 'mecha', 'mummy',
   ];
   const entries = await Promise.all(
     keys.map(

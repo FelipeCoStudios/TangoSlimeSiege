@@ -254,6 +254,11 @@ export class GameEngine {
     for (const e of this.enemies) {
       if (!e.alive) continue;
       e.update(dt, this.elapsed, this.world);
+      if (e.alive && e.burnUntil > 0 && this.elapsed >= e.burnTick && this.elapsed <= e.burnUntil) {
+        this.damageEnemy(e, 10, false);
+        e.burnTick += 1;
+      }
+      if (!e.alive) continue;
       if (e.dist >= pathLen) {
         e.alive = false; e.removeFrom(this.world.scene);
         this.lives -= e.def.damage; audio.hurt();
@@ -269,6 +274,15 @@ export class GameEngine {
 
   private updateTowers(dt: number) {
     for (const t of this.towers) {
+      if (t.defKey === 'sunflower') {
+        t.incomeTimer += dt;
+        while (t.incomeTimer >= 10) {
+          t.incomeTimer -= 10;
+          this.gold += 15;
+          this.cb.onToast('Sunflower Dog: +15 oro');
+          this.emitStats(true);
+        }
+      }
       t.cooldown -= dt;
       if (t.cooldown > 0) continue;
       let best: Enemy | null = null; let bestDist = -1;
@@ -278,7 +292,15 @@ export class GameEngine {
         if (d <= t.range && e.dist > bestDist) { best = e; bestDist = e.dist; }
       }
       if (!best) continue;
-      t.cooldown = 1 / t.def.rate;
+      let attackRate = t.def.rate;
+      if (t.defKey !== 'bard') {
+        const nearbyBards = this.towers.filter(
+          (ally) => ally !== t && ally.defKey === 'bard' && ally.group.position.distanceTo(t.group.position) <= 4.5,
+        ).length;
+        attackRate *= Math.pow(1.15, nearbyBards);
+      }
+      t.cooldown = 1 / Math.max(0.05, attackRate);
+      t.shotsFired += 1;
       const dirX = best.sprite.position.x - t.group.position.x;
       if (Math.abs(dirX) > 0.01) t.lastDirX = Math.sign(dirX);
       const base = 2.4 + (t.level - 1) * 0.35;
@@ -290,23 +312,44 @@ export class GameEngine {
   private fireProjectile(t: Tower, target: Enemy) {
     const def = t.def;
     const from = t.group.position.clone().add(new THREE.Vector3(0, 2.2, 0));
+    const shotNumber = t.shotsFired;
     if (def.splash) {
-      audio.cannon(); this.effects.shake(0.15, 0.12);
-      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.texBall, transparent: true, depthWrite: false }));
-      sprite.scale.setScalar(0.65);
-      this.projectiles.push({ kind: 'ball', sprite, from, to: target.sprite.position.clone(), target: null, t: 0, duration: 0.55, dmg: t.dmg, splash: def.splash, alive: true });
-      this.world.scene.add(sprite);
+      audio.cannon();
+      this.effects.shake(0.15, 0.12);
+      const doubleShot = t.defKey === 'mecha' && shotNumber % 4 === 0;
+      const count = doubleShot ? 2 : 1;
+      const dmg = doubleShot ? Math.round(t.dmg * 0.7) : t.dmg;
+      for (let i = 0; i < count; i++) {
+        const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.texBall, transparent: true, depthWrite: false }));
+        sprite.scale.setScalar(0.65);
+        const offset = count === 2 ? (i === 0 ? -0.18 : 0.18) : 0;
+        const start = from.clone().add(new THREE.Vector3(offset, 0, offset));
+        this.projectiles.push({
+          kind: 'ball', sprite, from: start, to: target.sprite.position.clone(), target: null,
+          t: 0, duration: 0.55, dmg, splash: def.splash,
+          towerKey: t.defKey, towerId: t.id, shotNumber, alive: true,
+        });
+        this.world.scene.add(sprite);
+      }
     } else if (def.slow) {
       audio.frost();
       const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.texSnow, transparent: true, depthWrite: false }));
       sprite.scale.setScalar(0.9);
-      this.projectiles.push({ kind: 'frost', sprite, from, to: new THREE.Vector3(), target, t: 0, duration: 0, dmg: t.dmg, slow: def.slow, alive: true });
+      this.projectiles.push({
+        kind: 'frost', sprite, from, to: new THREE.Vector3(), target, t: 0, duration: 0,
+        dmg: t.dmg, slow: def.slow, towerKey: t.defKey, towerId: t.id, shotNumber, alive: true,
+      });
       this.world.scene.add(sprite);
     } else {
       audio.shoot();
       const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.texArrow, transparent: true, depthWrite: false }));
       sprite.scale.set(1.4, 0.35, 1);
-      this.projectiles.push({ kind: 'arrow', sprite, from, to: new THREE.Vector3(), target, t: 0, duration: 0, dmg: t.dmg, alive: true });
+      const critical = t.defKey === 'sneaker' && shotNumber % 5 === 0;
+      this.projectiles.push({
+        kind: 'arrow', sprite, from, to: new THREE.Vector3(), target, t: 0, duration: 0,
+        dmg: critical ? t.dmg * 2 : t.dmg,
+        towerKey: t.defKey, towerId: t.id, shotNumber, alive: true,
+      });
       this.world.scene.add(sprite);
     }
     t.sprite.scale.x *= 0.85;
@@ -341,17 +384,25 @@ export class GameEngine {
   }
 
   private landCannonball(p: Projectile) {
-    p.alive = false; this.world.scene.remove(p.sprite);
-    audio.splash(); this.effects.shake(0.5, 0.25); this.effects.starBurst(p.to, 6);
+    p.alive = false;
+    this.world.scene.remove(p.sprite);
+    audio.splash();
+    this.effects.shake(0.5, 0.25);
+    this.effects.starBurst(p.to, 6);
     const splash = p.splash ?? 2;
     for (const e of this.enemies) {
-      if (!e.alive) continue;
-      if (e.sprite.position.distanceTo(p.to) <= splash + 0.4) this.damageEnemy(e, p.dmg, true);
+      if (!e.alive || e.sprite.position.distanceTo(p.to) > splash + 0.4) continue;
+      this.damageEnemy(e, p.dmg, true);
+      if (p.towerKey === 'firemage' && e.alive) {
+        e.burnUntil = Math.max(e.burnUntil, this.elapsed + 3);
+        if (e.burnTick < this.elapsed) e.burnTick = this.elapsed + 1;
+      }
     }
   }
 
   private hitEnemy(p: Projectile, target: Enemy) {
-    p.alive = false; this.world.scene.remove(p.sprite);
+    p.alive = false;
+    this.world.scene.remove(p.sprite);
     if (p.kind === 'frost' && p.slow) {
       target.applySlow(p.slow.factor, p.slow.duration, this.elapsed);
       this.effects.frostPuff(target.sprite.position);
@@ -359,7 +410,16 @@ export class GameEngine {
       audio.hit();
       this.effects.hitSpark(target.sprite.position.clone().add(new THREE.Vector3(0, 1, 0)));
     }
+    if (p.towerKey === 'boxer' && Math.random() < 0.2) target.applySlow(0, 0.6, this.elapsed);
+    if (p.towerKey === 'bubble' && p.shotNumber && p.shotNumber % 4 === 0) target.applySlow(0, 1, this.elapsed);
     this.damageEnemy(target, p.dmg, false);
+    if (p.towerKey === 'electrician') {
+      const chained = this.enemies
+        .filter((e) => e.alive && e !== target && e.sprite.position.distanceTo(target.sprite.position) < 3)
+        .sort((a, b) => a.sprite.position.distanceTo(target.sprite.position) - b.sprite.position.distanceTo(target.sprite.position))
+        .slice(0, 3);
+      for (const other of chained) this.damageEnemy(other, Math.round(p.dmg * 0.6), false);
+    }
   }
 
   private damageEnemy(e: Enemy, dmg: number, _isSplash: boolean) {
