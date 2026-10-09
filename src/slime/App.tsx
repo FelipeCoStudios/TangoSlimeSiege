@@ -11,6 +11,7 @@ const SPRITE = (k: string) => `${import.meta.env.BASE_URL}sprites/${k}.png`;
 
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const towerBarRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef<GameEngine | null>(null);
   const [ready, setReady] = useState(false);
@@ -61,6 +62,12 @@ export default function App() {
     audio.init();
     setStarted(true);
     engineRef.current?.startGame();
+  };
+
+  const scrollTowers = (direction: -1 | 1) => {
+    const bar = towerBarRef.current;
+    if (!bar) return;
+    bar.scrollBy({ left: direction * Math.max(240, bar.clientWidth * 0.75), behavior: 'smooth' });
   };
 
   const gold = stats?.gold ?? 0;
@@ -181,7 +188,15 @@ export default function App() {
             </div>
           )}
 
-          <div className="tower-bar">
+          <div className="tower-selector">
+            <button type="button" className="tower-scroll-btn" onClick={() => scrollTowers(-1)} aria-label="Torres anteriores">‹</button>
+            <div
+              ref={towerBarRef}
+              className="tower-bar"
+              onWheel={(event) => {
+                if (event.deltaY !== 0) event.currentTarget.scrollLeft += event.deltaY;
+              }}
+            >
             {TOWER_ORDER.map((key) => {
               const def = TOWERS[key];
               const affordable = gold >= def.cost;
@@ -200,6 +215,9 @@ export default function App() {
                 </button>
               );
             })}
+            </div>
+            <button type="button" className="tower-scroll-btn" onClick={() => scrollTowers(1)} aria-label="Más torres">›</button>
+            <div className="tower-scroll-hint">14 torres · usa las flechas para ver todas</div>
           </div>
 
           {selectedType && (
