@@ -250,6 +250,21 @@ export class GameEngine {
     this.spawnTimer = spawnInterval(this.wave);
   }
 
+  private finishGame() {
+    // Freeze the match immediately and force the UI to show the defeat screen.
+    this.lives = 0;
+    this.phase = 'over';
+    this.victory = false;
+    this.spawnQueue = [];
+    this.selectedType = null;
+    this.selectedTower = null;
+    this.hideGhost();
+    this.hideRings();
+    this.cb.onTowerSelected(null);
+    this.cb.onToast('Derrota');
+    this.emitStats(true);
+  }
+
   private updateEnemies(dt: number) {
     const pathLen = this.world.pathCumulative[this.world.pathCumulative.length - 1];
     for (const e of this.enemies) {
@@ -263,7 +278,10 @@ export class GameEngine {
       if (e.dist >= pathLen) {
         e.alive = false; e.removeFrom(this.world.scene);
         this.lives -= e.def.damage; audio.hurt();
-        if (this.lives <= 0) { this.lives = 0; this.phase = 'over'; this.cb.onToast('Derrota'); }
+        if (this.lives <= 0) {
+          this.finishGame();
+          break;
+        }
       }
     }
     this.enemies = this.enemies.filter((e) => e.alive);
