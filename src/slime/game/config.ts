@@ -14,15 +14,15 @@ export interface EnemyDef {
 }
 
 export const ENEMIES: Record<string, EnemyDef> = {
-  slime: { key: 'slime', name: 'Slime', hp: 60, speed: 2.3, gold: 6, damage: 1, size: 1.7 },
-  goblin: { key: 'goblin', name: 'Duende', hp: 60, speed: 3.7, gold: 8, damage: 1, size: 1.8 },
+  slime: { key: 'slime', name: 'Slime', hp: 40, speed: 2.3, gold: 6, damage: 1, size: 1.7 },
+  goblin: { key: 'goblin', name: 'Duende', hp: 26, speed: 3.7, gold: 8, damage: 1, size: 1.8 },
   mushroom: { key: 'mushroom', name: 'Champiñón', hp: 115, speed: 1.6, gold: 12, damage: 2, size: 1.9 },
   golem: { key: 'golem', name: 'Gólem', hp: 630, speed: 1.1, gold: 45, damage: 5, size: 3.4 },
   // Nuevas tropas (perros disfrazados)
-  dog_runner: { key: 'dog_runner', name: 'Perro Veloz', hp: 45, speed: 4.2, gold: 9, damage: 1, size: 1.8 },
+  dog_runner: { key: 'dog_runner', name: 'Perro Veloz', hp: 30, speed: 4.2, gold: 9, damage: 1, size: 1.8 },
   dog_flower: { key: 'dog_flower', name: 'Perro Flor', hp: 60, speed: 2.0, gold: 10, damage: 1, size: 1.9 },
   dog_boxer: { key: 'boxer_portrait', name: 'Perro Boxeador', hp: 85, speed: 2.8, gold: 14, damage: 2, size: 1.9 },
-  dog_bard: { key: 'dog_bard', name: 'Perro Bardo', hp: 85, speed: 2.5, gold: 11, damage: 1, size: 1.8 },
+  dog_bard: { key: 'dog_bard', name: 'Perro Bardo', hp: 55, speed: 2.5, gold: 11, damage: 1, size: 1.8 },
   dog_mage: { key: 'dog_mage', name: 'Perro Mago', hp: 72, speed: 2.2, gold: 15, damage: 2, size: 2.0 },
   dog_bubble: { key: 'dog_bubble', name: 'Perro Burbuja', hp: 45, speed: 1.8, gold: 8, damage: 1, size: 2.2 },
   dog_cyborg: { key: 'dog_cyborg', name: 'Perro Cyborg', hp: 180, speed: 1.9, gold: 22, damage: 3, size: 2.1 },
@@ -63,7 +63,7 @@ export const TOWERS: Record<string, TowerDef> = {
   sneaker: { key: 'sneaker', name: 'Sneaker Dog', desc: 'Cada quinto golpe hace daño crítico', projectileEmoji: '👟', cost: 120, dmg: 18, rate: 1 / 1.2, range: 6, color: '#ffb84d' },
   boxer: { key: 'dog_boxer', name: 'Boxer Dog', desc: '20% de probabilidad de aturdir', projectileEmoji: '🥊', cost: 180, dmg: 52, rate: 1 / 2.8, range: 7.5, color: '#e76b55' },
   sunflower: { key: 'dog_flower', name: 'Sunflower Dog', desc: 'Genera 150 monedas cada 10 segundos', projectileEmoji: '🌻', cost: 210, dmg: 7, rate: 1 / 2.5, range: 7.5, color: '#f5d547' },
-  bard: { key: 'dog_bard', name: 'Bard Dog', desc: 'Aumenta 15% la velocidad de ataque cercana', projectileEmoji: '🎵', cost: 360, dmg: 12, rate: 1 / 2.2, range: 9, color: '#b77bdf' },
+  bard: { key: 'dog_bard', name: 'Bard Dog', desc: 'Aumenta 15% la velocidad de ataque cercana', projectileEmoji: '🎵', cost: 300, dmg: 12, rate: 1 / 2.2, range: 9, color: '#b77bdf' },
   bubble: { key: 'dog_bubble', name: 'Bubble Dog', desc: 'Cada cuarto ataque inmoviliza brevemente', projectileEmoji: '🫧', cost: 360, dmg: 22, rate: 1 / 3.2, range: 7.5, color: '#71d9ef' },
   firemage: { key: 'firemage', name: 'Fire Mage Dog', desc: 'Daño en área y quemadura', projectileEmoji: '🔥', cost: 420, dmg: 82, rate: 1 / 3.8, range: 10.5, splash: 1.8, color: '#ff653b' },
   crystal: { key: 'crystal', name: 'Crystal Dog', desc: 'Ralentiza a los enemigos', projectileEmoji: '💎', cost: 480, dmg: 45, rate: 1 / 2.8, range: 9, slow: { factor: 0.65, duration: 2 }, color: '#7fd8ff' },
