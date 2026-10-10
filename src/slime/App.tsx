@@ -8,6 +8,260 @@ import { TOWERS, TOWER_ORDER, VICTORY_WAVE } from './game/config';
 import { GameEngine, type GameStats, type TowerInfo } from './game/engine';
 
 const SPRITE = (k: string) => `${import.meta.env.BASE_URL}sprites/${k.startsWith('tower_') ? `${k}.svg` : k === 'boxer_portrait' ? 'boxer_portrait.webp' : `${k}.png`}`;
+
+type LanguageCode = 'es' | 'en' | 'pt' | 'fr';
+
+const LANGUAGE_OPTIONS: Array<{ code: LanguageCode; label: string }> = [
+  { code: 'es', label: 'ES' },
+  { code: 'en', label: 'EN' },
+  { code: 'pt', label: 'PT' },
+  { code: 'fr', label: 'FR' },
+];
+
+const UI_TEXT: Record<LanguageCode, Record<string, string>> = {
+  es: {
+    language: 'Idioma',
+    subtitle: '¡Defiende tu reino con tus pollitos favoritos!',
+    menuHint: 'Coloca torres en las parcelas de piedra y detén a los monstruos antes de que lleguen al castillo.',
+    play: '¡JUGAR!',
+    loading: 'Cargando…',
+    wave: 'Oleada',
+    firstWave: '¡Empezar Oleada 1!',
+    nextWave: '¡Oleada {wave}!',
+    music: 'Música',
+    soundEffects: 'Efectos de sonido',
+    level: 'Nv.',
+    damage: 'Daño',
+    range: 'Rango',
+    upgrade: '⬆ Mejorar · {cost}',
+    maxLevel: '¡NIVEL MÁX!',
+    sell: 'Vender · +{value}',
+    previousTowers: 'Torres anteriores',
+    moreTowers: 'Más torres',
+    towerScrollHint: '{count} torres · usa las flechas para ver todas',
+    buildHint: 'Toca una parcela de piedra para construir · toca de nuevo la carta para cancelar',
+    victory: '¡VICTORIA!',
+    victoryText: 'Has defendido el Reino Gelatina durante {wave} oleadas.',
+    endless: 'Modo Infinito ∞',
+    replay: 'Jugar de nuevo',
+    defeat: '¡EL CASTILLO HA CAÍDO!',
+    survived: 'Sobreviviste hasta la oleada {wave}.',
+    again: '¡Otra vez!',
+    earlyBonus: 'Bonus por adelantar +{amount}',
+    noGold: 'Sin oro',
+    chooseTower: 'Elige una torre abajo',
+    tower_archer: 'Perro Arquero',
+    desc_archer: 'Rápido y barato',
+    tower_cannon: 'Perro Bomba',
+    desc_cannon: 'Daño en área',
+    tower_frost: 'Perro Mago de Hielo',
+    desc_frost: 'Ralentiza enemigos',
+    tower_normaldog: 'Normal Dog',
+    desc_normaldog: 'Unidad inicial económica',
+    tower_sneaker: 'Sneaker Dog',
+    desc_sneaker: 'Cada quinto golpe hace daño crítico',
+    tower_boxer: 'Boxer Dog',
+    desc_boxer: '20% de probabilidad de aturdir',
+    tower_sunflower: 'Sunflower Dog',
+    desc_sunflower: 'Genera 150 monedas cada 10 segundos',
+    tower_bard: 'Bard Dog',
+    desc_bard: 'Aumenta 15% la velocidad de ataque cercana',
+    tower_bubble: 'Bubble Dog',
+    desc_bubble: 'Cada cuarto ataque inmoviliza brevemente',
+    tower_firemage: 'Fire Mage Dog',
+    desc_firemage: 'Daño en área y quemadura',
+    tower_crystal: 'Crystal Dog',
+    desc_crystal: 'Ralentiza a los enemigos',
+    tower_electrician: 'Electrician Dog',
+    desc_electrician: 'El rayo rebota hasta a 3 enemigos',
+    tower_mecha: 'Mecha Dog',
+    desc_mecha: 'Cada cuarto ataque dispara dos proyectiles',
+    tower_mummy: 'Mummy Dog',
+    desc_mummy: 'Reduce 50% la velocidad del objetivo',
+  },
+  en: {
+    language: 'Language',
+    subtitle: 'Defend your kingdom with your favorite little dogs!',
+    menuHint: 'Place towers on the stone plots and stop the monsters before they reach the castle.',
+    play: 'PLAY!',
+    loading: 'Loading…',
+    wave: 'Wave',
+    firstWave: 'Start Wave 1!',
+    nextWave: 'Wave {wave}!',
+    music: 'Music',
+    soundEffects: 'Sound effects',
+    level: 'Lv.',
+    damage: 'Damage',
+    range: 'Range',
+    upgrade: '⬆ Upgrade · {cost}',
+    maxLevel: 'MAX LEVEL!',
+    sell: 'Sell · +{value}',
+    previousTowers: 'Previous towers',
+    moreTowers: 'More towers',
+    towerScrollHint: '{count} towers · use arrows to see them all',
+    buildHint: 'Tap a stone plot to build · tap the card again to cancel',
+    victory: 'VICTORY!',
+    victoryText: 'You defended the Jelly Kingdom for {wave} waves.',
+    endless: 'Endless Mode ∞',
+    replay: 'Play again',
+    defeat: 'THE CASTLE HAS FALLEN!',
+    survived: 'You survived until wave {wave}.',
+    again: 'Try again!',
+    earlyBonus: 'Early wave bonus +{amount}',
+    noGold: 'Not enough gold',
+    chooseTower: 'Choose a tower below',
+    tower_archer: 'Archer Dog',
+    desc_archer: 'Fast and cheap',
+    tower_cannon: 'Bomb Dog',
+    desc_cannon: 'Area damage',
+    tower_frost: 'Ice Mage Dog',
+    desc_frost: 'Slows enemies',
+    tower_normaldog: 'Normal Dog',
+    desc_normaldog: 'Affordable starter unit',
+    tower_sneaker: 'Sneaker Dog',
+    desc_sneaker: 'Every fifth hit deals critical damage',
+    tower_boxer: 'Boxer Dog',
+    desc_boxer: '20% chance to stun',
+    tower_sunflower: 'Sunflower Dog',
+    desc_sunflower: 'Generates 150 coins every 10 seconds',
+    tower_bard: 'Bard Dog',
+    desc_bard: 'Increases nearby attack speed by 15%',
+    tower_bubble: 'Bubble Dog',
+    desc_bubble: 'Every fourth attack briefly immobilizes',
+    tower_firemage: 'Fire Mage Dog',
+    desc_firemage: 'Area damage and burn',
+    tower_crystal: 'Crystal Dog',
+    desc_crystal: 'Slows enemies',
+    tower_electrician: 'Electrician Dog',
+    desc_electrician: 'Lightning bounces to up to 3 enemies',
+    tower_mecha: 'Mecha Dog',
+    desc_mecha: 'Every fourth attack fires two projectiles',
+    tower_mummy: 'Mummy Dog',
+    desc_mummy: 'Reduces target speed by 50%',
+  },
+  pt: {
+    language: 'Idioma',
+    subtitle: 'Defenda seu reino com seus cachorrinhos favoritos!',
+    menuHint: 'Coloque torres nas plataformas de pedra e impeça os monstros de chegar ao castelo.',
+    play: 'JOGAR!',
+    loading: 'Carregando…',
+    wave: 'Onda',
+    firstWave: 'Começar Onda 1!',
+    nextWave: 'Onda {wave}!',
+    music: 'Música',
+    soundEffects: 'Efeitos sonoros',
+    level: 'Nv.',
+    damage: 'Dano',
+    range: 'Alcance',
+    upgrade: '⬆ Melhorar · {cost}',
+    maxLevel: 'NÍVEL MÁXIMO!',
+    sell: 'Vender · +{value}',
+    previousTowers: 'Torres anteriores',
+    moreTowers: 'Mais torres',
+    towerScrollHint: '{count} torres · use as setas para ver todas',
+    buildHint: 'Toque numa plataforma de pedra para construir · toque no cartão novamente para cancelar',
+    victory: 'VITÓRIA!',
+    victoryText: 'Você defendeu o Reino Gelatina por {wave} ondas.',
+    endless: 'Modo Infinito ∞',
+    replay: 'Jogar novamente',
+    defeat: 'O CASTELO CAIU!',
+    survived: 'Você sobreviveu até a onda {wave}.',
+    again: 'Tentar novamente!',
+    earlyBonus: 'Bônus por adiantar +{amount}',
+    noGold: 'Ouro insuficiente',
+    chooseTower: 'Escolha uma torre abaixo',
+    tower_archer: 'Cão Arqueiro',
+    desc_archer: 'Rápido e barato',
+    tower_cannon: 'Cão Bomba',
+    desc_cannon: 'Dano em área',
+    tower_frost: 'Cão Mago do Gelo',
+    desc_frost: 'Desacelera inimigos',
+    tower_normaldog: 'Normal Dog',
+    desc_normaldog: 'Unidade inicial econômica',
+    tower_sneaker: 'Sneaker Dog',
+    desc_sneaker: 'A cada quinto golpe causa dano crítico',
+    tower_boxer: 'Boxer Dog',
+    desc_boxer: '20% de chance de atordoar',
+    tower_sunflower: 'Sunflower Dog',
+    desc_sunflower: 'Gera 150 moedas a cada 10 segundos',
+    tower_bard: 'Bard Dog',
+    desc_bard: 'Aumenta em 15% a velocidade de ataque próxima',
+    tower_bubble: 'Bubble Dog',
+    desc_bubble: 'A cada quarto ataque imobiliza brevemente',
+    tower_firemage: 'Fire Mage Dog',
+    desc_firemage: 'Dano em área e queimadura',
+    tower_crystal: 'Crystal Dog',
+    desc_crystal: 'Desacelera os inimigos',
+    tower_electrician: 'Electrician Dog',
+    desc_electrician: 'O raio salta para até 3 inimigos',
+    tower_mecha: 'Mecha Dog',
+    desc_mecha: 'A cada quarto ataque dispara dois projéteis',
+    tower_mummy: 'Mummy Dog',
+    desc_mummy: 'Reduz a velocidade do alvo em 50%',
+  },
+  fr: {
+    language: 'Langue',
+    subtitle: 'Défends ton royaume avec tes chiens préférés !',
+    menuHint: 'Place des tours sur les dalles de pierre et arrête les monstres avant qu’ils atteignent le château.',
+    play: 'JOUER !',
+    loading: 'Chargement…',
+    wave: 'Vague',
+    firstWave: 'Lancer la vague 1 !',
+    nextWave: 'Vague {wave} !',
+    music: 'Musique',
+    soundEffects: 'Effets sonores',
+    level: 'Nv.',
+    damage: 'Dégâts',
+    range: 'Portée',
+    upgrade: '⬆ Améliorer · {cost}',
+    maxLevel: 'NIVEAU MAX !',
+    sell: 'Vendre · +{value}',
+    previousTowers: 'Tours précédentes',
+    moreTowers: 'Autres tours',
+    towerScrollHint: '{count} tours · utilise les flèches pour tout voir',
+    buildHint: 'Touche une dalle de pierre pour construire · touche à nouveau la carte pour annuler',
+    victory: 'VICTOIRE !',
+    victoryText: 'Tu as défendu le Royaume Gelée pendant {wave} vagues.',
+    endless: 'Mode infini ∞',
+    replay: 'Rejouer',
+    defeat: 'LE CHÂTEAU EST TOMBÉ !',
+    survived: 'Tu as survécu jusqu’à la vague {wave}.',
+    again: 'Réessayer !',
+    earlyBonus: 'Bonus de vague anticipée +{amount}',
+    noGold: 'Pas assez d’or',
+    chooseTower: 'Choisis une tour ci-dessous',
+    tower_archer: 'Chien Archer',
+    desc_archer: 'Rapide et économique',
+    tower_cannon: 'Chien Bombe',
+    desc_cannon: 'Dégâts de zone',
+    tower_frost: 'Chien Mage de Glace',
+    desc_frost: 'Ralentit les ennemis',
+    tower_normaldog: 'Normal Dog',
+    desc_normaldog: 'Unité de départ économique',
+    tower_sneaker: 'Sneaker Dog',
+    desc_sneaker: 'Chaque cinquième coup inflige un coup critique',
+    tower_boxer: 'Boxer Dog',
+    desc_boxer: '20 % de chances d’étourdir',
+    tower_sunflower: 'Sunflower Dog',
+    desc_sunflower: 'Génère 150 pièces toutes les 10 secondes',
+    tower_bard: 'Bard Dog',
+    desc_bard: 'Augmente la vitesse d’attaque proche de 15 %',
+    tower_bubble: 'Bubble Dog',
+    desc_bubble: 'Chaque quatrième attaque immobilise brièvement',
+    tower_firemage: 'Fire Mage Dog',
+    desc_firemage: 'Dégâts de zone et brûlure',
+    tower_crystal: 'Crystal Dog',
+    desc_crystal: 'Ralentit les ennemis',
+    tower_electrician: 'Electrician Dog',
+    desc_electrician: 'La foudre rebondit sur jusqu’à 3 ennemis',
+    tower_mecha: 'Mecha Dog',
+    desc_mecha: 'Chaque quatrième attaque tire deux projectiles',
+    tower_mummy: 'Mummy Dog',
+    desc_mummy: 'Réduit la vitesse de la cible de 50 %',
+  },
+};
+
+
 const SPRITE_FALLBACKS: Record<string, string> = {
   normaldog: 'dog_runner',
   sneaker: 'dog_runner',
@@ -68,7 +322,62 @@ export default function App() {
   const [toast, setToast] = useState<string | null>(null);
   const [musicOn, setMusicOn] = useState(true);
   const [sfxOn, setSfxOn] = useState(true);
+  const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
+  const [language, setLanguage] = useState<LanguageCode>(() => {
+    if (typeof window === 'undefined') return 'es';
+    try {
+      const saved = window.localStorage.getItem('tangoMayhemLanguage');
+      if (saved === 'es' || saved === 'en' || saved === 'pt' || saved === 'fr') return saved;
+    } catch {
+      // Storage can be unavailable in private browsing; Spanish remains the default.
+    }
+    return 'es';
+  });
   const toastTimer = useRef<number | null>(null);
+
+  const t = (key: string, values: Record<string, string | number> = {}) => {
+    let result = UI_TEXT[language][key] ?? UI_TEXT.es[key] ?? key;
+    for (const [name, value] of Object.entries(values)) {
+      result = result.replaceAll(`{${name}}`, String(value));
+    }
+    return result;
+  };
+
+  const chooseLanguage = (nextLanguage: LanguageCode) => {
+    setLanguage(nextLanguage);
+    setLanguageMenuOpen(false);
+    try {
+      window.localStorage.setItem('tangoMayhemLanguage', nextLanguage);
+    } catch {
+      // The choice still applies for the current session.
+    }
+  };
+
+  const localizeToast = (message: string) => {
+    if (message.startsWith('Bonus adelantar +')) {
+      return t('earlyBonus', { amount: message.slice('Bonus adelantar +'.length) });
+    }
+    if (message === 'Sin oro') return t('noGold');
+    if (message === 'Elige torre abajo') return t('chooseTower');
+    return message;
+  };
+
+  const languageButtons = (
+    <div className="language-picker" role="group" aria-label={t('language')}>
+      {LANGUAGE_OPTIONS.map((option) => (
+        <button
+          key={option.code}
+          type="button"
+          className={`language-button ${language === option.code ? 'active' : ''}`}
+          onClick={() => chooseLanguage(option.code)}
+          aria-pressed={language === option.code}
+          aria-label={t('language') + ': ' + option.label}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  );
   const bgMusicRef = useRef<HTMLAudioElement | null>(null);
   const musicEnabledRef = useRef(true);
 
@@ -119,7 +428,7 @@ export default function App() {
         if (t) setSelectedType(null);
       },
       onToast: (msg) => {
-        setToast(msg);
+        setToast(localizeToast(msg));
         if (toastTimer.current) window.clearTimeout(toastTimer.current);
         toastTimer.current = window.setTimeout(() => setToast(null), 2200);
       },
@@ -174,18 +483,17 @@ export default function App() {
               <span>TANGO</span>
               <span className="title-alt">MAYHEM</span>
             </h1>
-            <p className="game-subtitle">¡Defiende tu reino con tus pollitos favoritos!</p>
+            <p className="game-subtitle">{t('subtitle')}</p>
+            {languageButtons}
             <div className="menu-chars">
               <img src={SPRITE('dog_runner')} onError={(event) => recoverSprite(event, 'dog_runner')} alt="Normal Dog" />
               <img src={SPRITE('slime')} onError={(event) => recoverSprite(event, 'slime')} alt="Slime" />
               <img src={SPRITE('firemage')} onError={(event) => recoverSprite(event, 'firemage')} alt="Fire Mage Dog" />
             </div>
             <button className="btn-3d btn-play" onClick={begin} disabled={!ready}>
-              {ready ? '¡JUGAR!' : 'Cargando…'}
+              {ready ? t('play') : t('loading')}
             </button>
-            <p className="menu-hint">
-              Coloca torres en las parcelas de piedra y detén a los monstruos antes de que lleguen al castillo.
-            </p>
+            <p className="menu-hint">{t('menuHint')}</p>
           </div>
         </div>
       )}
@@ -203,7 +511,7 @@ export default function App() {
                 <span>{stats.gold}</span>
               </div>
               <div className="hud-pill hud-wave">
-                <span className="hud-label">Oleada</span>
+                <span className="hud-label">{t('wave')}</span>
                 <span>{stats.wave}{stats.wave > VICTORY_WAVE ? ' ∞' : `/${VICTORY_WAVE}`}</span>
               </div>
             </div>
@@ -232,7 +540,7 @@ export default function App() {
                     audio.setMusic(true);
                   }
                 }}
-                aria-label="Música"
+                aria-label={t('music')}
               >
                 {musicOn ? '♫' : '♪̶'}
               </button>
@@ -243,16 +551,42 @@ export default function App() {
                   setSfxOn(v);
                   audio.setSfx(v);
                 }}
-                aria-label="Efectos de sonido"
+                aria-label={t('soundEffects')}
               >
                 {sfxOn ? '🔊' : '🔇'}
+              </button>
+              <button
+                type="button"
+                className={`btn-3d btn-small language-toggle ${languageMenuOpen ? 'btn-active' : ''}`}
+                onClick={() => setLanguageMenuOpen((open) => !open)}
+                aria-label={t('language')}
+                aria-expanded={languageMenuOpen}
+                title={t('language')}
+              >
+                🌐 {language.toUpperCase()}
               </button>
             </div>
           </div>
 
+          {languageMenuOpen && (
+            <div className="language-picker in-game-language-picker" role="group" aria-label={t('language')}>
+              {LANGUAGE_OPTIONS.map((option) => (
+                <button
+                  key={option.code}
+                  type="button"
+                  className={`language-button ${language === option.code ? 'active' : ''}`}
+                  onClick={() => chooseLanguage(option.code)}
+                  aria-pressed={language === option.code}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          )}
+
           {!waveInProgress && !gameOver && !victory && (
             <button className="btn-3d btn-wave pulse" onClick={() => engineRef.current?.startWave(stats.wave > 0)}>
-              {stats.wave === 0 ? '¡Empezar Oleada 1!' : `¡Oleada ${stats.wave + 1}!`}
+              {stats.wave === 0 ? t('firstWave') : t('nextWave', { wave: stats.wave + 1 })}
             </button>
           )}
 
@@ -263,7 +597,7 @@ export default function App() {
                 <div>
                   <strong>{TOWERS[towerInfo.type].name}</strong>
                   <span className="tower-popup-sub">
-                    Nv. {towerInfo.level} · Daño {towerInfo.dmg} · Rango {towerInfo.range}
+                    {t('level')} {towerInfo.level} · {t('damage')} {towerInfo.dmg} · {t('range')} {towerInfo.range}
                   </span>
                 </div>
               </div>
@@ -274,20 +608,20 @@ export default function App() {
                     disabled={gold < towerInfo.upgradeCost}
                     onClick={() => engineRef.current?.upgradeSelected()}
                   >
-                    ⬆ Mejorar · {towerInfo.upgradeCost}
+                    {t('upgrade', { cost: towerInfo.upgradeCost })}
                   </button>
                 ) : (
-                  <span className="max-level">¡NIVEL MÁX!</span>
+                  <span className="max-level">{t('maxLevel')}</span>
                 )}
                 <button className="btn-3d btn-sell" onClick={() => engineRef.current?.sellSelected()}>
-                  Vender · +{towerInfo.sellValue}
+                  {t('sell', { value: towerInfo.sellValue })}
                 </button>
               </div>
             </div>
           )}
 
           <div className="tower-selector">
-            <button type="button" className="tower-scroll-btn" onClick={() => scrollTowers(-1)} aria-label="Torres anteriores">‹</button>
+            <button type="button" className="tower-scroll-btn" onClick={() => scrollTowers(-1)} aria-label={t('previousTowers')}>‹</button>
             <div
               ref={towerBarRef}
               className="tower-bar"
@@ -306,20 +640,20 @@ export default function App() {
                 >
                   <img src={SPRITE(def.key)} onError={(event) => recoverSprite(event, def.key)} alt={def.name} draggable={false} />
                   <div className="tower-card-info">
-                    <strong>{def.name}</strong>
-                    <span className="tower-desc">{def.desc}</span>
+                    <strong>{t('tower_' + key)}</strong>
+                    <span className="tower-desc">{t('desc_' + key)}</span>
                     <span className="tower-cost">● {def.cost}</span>
                   </div>
                 </button>
               );
             })}
             </div>
-            <button type="button" className="tower-scroll-btn" onClick={() => scrollTowers(1)} aria-label="Más torres">›</button>
-            <div className="tower-scroll-hint">14 torres · usa las flechas para ver todas</div>
+            <button type="button" className="tower-scroll-btn" onClick={() => scrollTowers(1)} aria-label={t('moreTowers')}>›</button>
+            <div className="tower-scroll-hint">{t('towerScrollHint', { count: TOWER_ORDER.length })}</div>
           </div>
 
           {selectedType && (
-            <div className="hint-bar">Toca una parcela de piedra para construir · toca de nuevo la carta para cancelar</div>
+            <div className="hint-bar">{t('buildHint')}</div>
           )}
 
           {toast && <div className="toast">{toast}</div>}
@@ -328,8 +662,8 @@ export default function App() {
             <div className="end-screen">
               <div className="end-panel victory-panel">
                 <h2 className="end-game-title">TANGO MAYHEM</h2>
-                <p className="end-status">¡VICTORIA!</p>
-                <p>Has defendido el Reino Gelatina durante {VICTORY_WAVE} oleadas.</p>
+                <p className="end-status">{t('victory')}</p>
+                <p>{t('victoryText', { wave: VICTORY_WAVE })}</p>
                 <div className="menu-chars end-chars">
                   <img src={SPRITE('dog_runner')} onError={(event) => recoverSprite(event, 'dog_runner')} alt="Pollito defensor" />
                   <img src={SPRITE('slime')} onError={(event) => recoverSprite(event, 'slime')} alt="Enemigo gelatinoso" />
@@ -337,10 +671,10 @@ export default function App() {
                 </div>
                 <div className="end-actions">
                   <button className="btn-3d btn-play" onClick={() => engineRef.current?.continueEndless()}>
-                    Modo Infinito ∞
+                    {t('endless')}
                   </button>
                   <button className="btn-3d btn-secondary" onClick={() => engineRef.current?.restart()}>
-                    Jugar de nuevo
+                    {t('replay')}
                   </button>
                 </div>
               </div>
@@ -351,11 +685,11 @@ export default function App() {
             <div className="end-screen">
               <div className="end-panel">
                 <h2 className="end-game-title">TANGO MAYHEM</h2>
-                <p className="end-status">¡EL CASTILLO HA CAÍDO!</p>
-                <p>Sobreviviste hasta la oleada {stats.wave}.</p>
+                <p className="end-status">{t('defeat')}</p>
+                <p>{t('survived', { wave: stats.wave })}</p>
                 <div className="end-actions">
                   <button className="btn-3d btn-play" onClick={() => engineRef.current?.restart()}>
-                    ¡Otra vez!
+                    {t('again')}
                   </button>
                 </div>
               </div>
