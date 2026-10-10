@@ -157,6 +157,44 @@ export type SpriteKey =
   | 'normaldog' | 'sneaker' | 'boxer' | 'sunflower' | 'bard' | 'bubble'
   | 'firemage' | 'crystal' | 'electrician' | 'mecha' | 'mummy';
 
+const SPRITE_FALLBACKS: Partial<Record<SpriteKey, SpriteKey>> = {
+  normaldog: 'dog_runner',
+  sneaker: 'dog_runner',
+  boxer: 'dog_boxer',
+  sunflower: 'dog_flower',
+  bard: 'dog_bard',
+  bubble: 'dog_bubble',
+  firemage: 'dog_mage',
+  crystal: 'dog_star',
+  electrician: 'dog_worker',
+  mecha: 'dog_cyborg',
+  mummy: 'dog_mummy',
+};
+
+function loadTexture(loader: THREE.TextureLoader, url: string): Promise<THREE.Texture> {
+  return new Promise((resolve, reject) => {
+    loader.load(url, resolve, undefined, reject);
+  });
+}
+
+function makeMissingSpriteTexture(key: SpriteKey): THREE.CanvasTexture {
+  const { c, ctx } = makeCanvas(128);
+  ctx.clearRect(0, 0, 128, 128);
+  ctx.fillStyle = '#253347';
+  ctx.beginPath();
+  ctx.arc(64, 64, 54, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = '#ffd166';
+  ctx.lineWidth = 6;
+  ctx.stroke();
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 15px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(key.replace(/_/g, ' ').slice(0, 14), 64, 64, 108);
+  return toTexture(c);
+}
+
 export async function loadCharacterTextures(): Promise<Record<SpriteKey, THREE.Texture>> {
   const loader = new THREE.TextureLoader();
   const keys: SpriteKey[] = [
@@ -166,22 +204,31 @@ export async function loadCharacterTextures(): Promise<Record<SpriteKey, THREE.T
     'normaldog', 'sneaker', 'boxer', 'sunflower', 'bard', 'bubble',
     'firemage', 'crystal', 'electrician', 'mecha', 'mummy',
   ];
-  const entries = await Promise.all(
-    keys.map(
-      (k) =>
-        new Promise<[SpriteKey, THREE.Texture]>((resolve, reject) => {
-          loader.load(
-            `${import.meta.env.BASE_URL}sprites/${k}.png`,
-            (t) => {
-              t.colorSpace = THREE.SRGBColorSpace;
-              t.anisotropy = 4;
-              resolve([k, t]);
-            },
-            undefined,
-            reject,
-          );
-        }),
-    ),
-  );
+
+  // Una imagen defectuosa no debe bloquear el resto del juego.
+  const entries = await Promise.all(keys.map(async (key): Promise<[SpriteKey, THREE.Texture]> => {
+    const fallback = SPRITE_FALLBACKS[key] ?? 'dog_runner';
+    const urls = [...new Set([
+      `${import.meta.env.BASE_URL}sprites/${key}.png`,
+      `/sprites/${key}.png`,
+      `${import.meta.env.BASE_URL}sprites/${fallback}.png`,
+      `/sprites/${fallback}.png`,
+    ])];
+
+    for (const url of urls) {
+      try {
+        const texture = await loadTexture(loader, url);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.anisotropy = 4;
+        return [key, texture];
+      } catch {
+        // Prueba la ruta alternativa o la imagen equivalente.
+      }
+    }
+
+    console.warn(`No se pudo cargar el sprite "${key}"; se usa una textura de reserva.`);
+    return [key, makeMissingSpriteTexture(key)];
+  }));
+
   return Object.fromEntries(entries) as Record<SpriteKey, THREE.Texture>;
 }
