@@ -53,7 +53,7 @@ export const TOWERS: Record<string, TowerDef> = {
   },
   cannon: {
     key: 'cannon', name: 'Perro Bomba', desc: 'Daño en área', projectileEmoji: '💣', cost: 90,
-    dmg: 26, rate: 0.6, range: 16.799999999999997, splash: 2.3, color: '#7ddb52',
+    dmg: 26, rate: 0.6, range: 16.8, splash: 2.3, color: '#7ddb52',
   },
   frost: {
     key: 'frost', name: 'Perro Mago Hielo', desc: 'Ralentiza enemigos', projectileEmoji: '❄️', cost: 70,
