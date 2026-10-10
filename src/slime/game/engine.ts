@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { audio } from './audio';
 import {
-  ENEMIES, MAX_LEVEL, SELL_RATIO, START_GOLD, START_LIVES, TOWERS, VICTORY_WAVE,
+  ENEMIES, GOLD_REWARD_MULTIPLIER, MAX_LEVEL, SELL_RATIO, START_GOLD, START_LIVES, SUNFLOWER_INCOME, TOWERS, VICTORY_WAVE,
   earlyWaveBonus, hpScale, spawnInterval, upgradeCost, waveComposition,
 } from './config';
 import { Effects } from './effects';
@@ -279,8 +279,8 @@ export class GameEngine {
         t.incomeTimer += dt;
         while (t.incomeTimer >= 10) {
           t.incomeTimer -= 10;
-          this.gold += 15;
-          this.cb.onToast('Sunflower Dog: +15 oro');
+          this.gold += SUNFLOWER_INCOME;
+          this.cb.onToast(`Sunflower Dog: +${SUNFLOWER_INCOME} monedas`);
           this.emitStats(true);
         }
       }
@@ -444,7 +444,7 @@ export class GameEngine {
       const big = e.defKey === 'golem';
       this.effects.starBurst(pos, big ? 16 : 7, big);
       this.effects.coinBurst(pos, big ? 6 : 2);
-      this.gold += e.def.gold;
+      this.gold += e.def.gold * GOLD_REWARD_MULTIPLIER;
       audio.coin();
     }
   }

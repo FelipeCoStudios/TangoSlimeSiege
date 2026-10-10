@@ -7,7 +7,7 @@ import { audio } from './game/audio';
 import { TOWERS, TOWER_ORDER, VICTORY_WAVE } from './game/config';
 import { GameEngine, type GameStats, type TowerInfo } from './game/engine';
 
-const SPRITE = (k: string) => `${import.meta.env.BASE_URL}sprites/${k}.png`;
+const SPRITE = (k: string) => `${import.meta.env.BASE_URL}sprites/${k.startsWith('tower_') ? `${k}.svg` : `${k}.png`}`;
 const SPRITE_FALLBACKS: Record<string, string> = {
   normaldog: 'dog_runner',
   sneaker: 'dog_runner',
@@ -30,6 +30,10 @@ const SPRITE_FALLBACKS: Record<string, string> = {
   dog_cyborg: 'mecha',
   mummy: 'dog_mummy',
   dog_mummy: 'mummy',
+  tower_boxer: 'dog_boxer',
+  tower_sunflower: 'dog_flower',
+  tower_bubble: 'dog_bubble',
+  tower_bard: 'dog_bard',
 };
 
 function recoverSprite(event: SyntheticEvent<HTMLImageElement>, key: string) {

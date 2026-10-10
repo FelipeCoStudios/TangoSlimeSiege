@@ -155,7 +155,8 @@ export type SpriteKey =
   | 'dog_runner' | 'dog_flower' | 'dog_boxer' | 'dog_bard' | 'dog_mage'
   | 'dog_bubble' | 'dog_cyborg' | 'dog_star' | 'dog_mummy' | 'dog_worker'
   | 'normaldog' | 'sneaker' | 'boxer' | 'sunflower' | 'bard' | 'bubble'
-  | 'firemage' | 'crystal' | 'electrician' | 'mecha' | 'mummy';
+  | 'firemage' | 'crystal' | 'electrician' | 'mecha' | 'mummy'
+  | 'tower_boxer' | 'tower_sunflower' | 'tower_bubble' | 'tower_bard';
 
 const SPRITE_FALLBACKS: Partial<Record<SpriteKey, SpriteKey>> = {
   normaldog: 'dog_runner',
@@ -179,6 +180,10 @@ const SPRITE_FALLBACKS: Partial<Record<SpriteKey, SpriteKey>> = {
   dog_cyborg: 'mecha',
   mummy: 'dog_mummy',
   dog_mummy: 'mummy',
+  tower_boxer: 'dog_boxer',
+  tower_sunflower: 'dog_flower',
+  tower_bubble: 'dog_bubble',
+  tower_bard: 'dog_bard',
 };
 
 function loadTexture(loader: THREE.TextureLoader, url: string): Promise<THREE.Texture> {
@@ -213,16 +218,20 @@ export async function loadCharacterTextures(): Promise<Record<SpriteKey, THREE.T
     'dog_bubble', 'dog_cyborg', 'dog_star', 'dog_mummy', 'dog_worker',
     'normaldog', 'sneaker', 'boxer', 'sunflower', 'bard', 'bubble',
     'firemage', 'crystal', 'electrician', 'mecha', 'mummy',
+    'tower_boxer', 'tower_sunflower', 'tower_bubble', 'tower_bard',
   ];
+
+  // Las cuatro torres problemáticas usan ilustraciones SVG independientes.
+  const spriteFile = (key: SpriteKey) => key.startsWith('tower_') ? `${key}.svg` : `${key}.png`;
 
   // Una imagen defectuosa no debe bloquear el resto del juego.
   const entries = await Promise.all(keys.map(async (key): Promise<[SpriteKey, THREE.Texture]> => {
     const fallback = SPRITE_FALLBACKS[key] ?? 'dog_runner';
     const urls = [...new Set([
-      `${import.meta.env.BASE_URL}sprites/${key}.png`,
-      `/sprites/${key}.png`,
-      `${import.meta.env.BASE_URL}sprites/${fallback}.png`,
-      `/sprites/${fallback}.png`,
+      `${import.meta.env.BASE_URL}sprites/${spriteFile(key)}`,
+      `/sprites/${spriteFile(key)}`,
+      `${import.meta.env.BASE_URL}sprites/${spriteFile(fallback)}`,
+      `/sprites/${spriteFile(fallback)}`,
     ])];
 
     for (const url of urls) {
