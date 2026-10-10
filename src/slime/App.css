@@ -1323,3 +1323,105 @@ body,
     -webkit-touch-callout: none;
   }
 }
+
+
+/* Selector de idioma: botones integrados y accesibles al tacto. */
+.language-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  pointer-events: auto;
+}
+
+.menu-panel > .language-picker {
+  margin: 2px 0 4px;
+}
+
+.language-button {
+  min-width: 42px;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 11px;
+  background: #fffdf5;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 3px 0 rgba(58, 36, 9, 0.85);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.language-button.active {
+  background: var(--yellow);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 rgba(58, 36, 9, 0.85);
+}
+
+.language-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(58, 36, 9, 0.85);
+}
+
+.language-toggle {
+  min-width: 62px;
+  padding-left: 7px;
+  padding-right: 7px;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.in-game-language-picker {
+  position: absolute;
+  top: calc(max(58px, env(safe-area-inset-top) + 50px));
+  right: max(8px, env(safe-area-inset-right));
+  z-index: 30;
+  padding: 8px;
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  background: var(--cream);
+  box-shadow: 4px 4px 0 rgba(58, 36, 9, 0.8);
+}
+
+@media (max-width: 600px) {
+  .menu-panel > .language-picker {
+    gap: 5px;
+    margin: 1px 0 3px;
+  }
+
+  .language-button {
+    min-width: 44px;
+    min-height: 40px;
+    font-size: 12px;
+  }
+
+  .language-toggle {
+    min-width: 48px;
+    width: auto;
+    padding: 4px 5px;
+    font-size: 10px;
+  }
+
+  .in-game-language-picker {
+    top: calc(max(52px, env(safe-area-inset-top) + 44px));
+    right: max(6px, env(safe-area-inset-right));
+    gap: 4px;
+    padding: 6px;
+  }
+
+  .in-game-language-picker .language-button {
+    min-width: 40px;
+    min-height: 38px;
+    padding: 5px 7px;
+  }
+}
+
+@media (max-width: 380px) {
+  .language-toggle {
+    min-width: 42px;
+  }
+}
