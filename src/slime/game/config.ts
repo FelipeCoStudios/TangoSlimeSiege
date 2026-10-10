@@ -49,27 +49,27 @@ export const TOWERS: Record<string, TowerDef> = {
   // Torres originales: se conservan para no cambiar las partidas existentes.
   archer: {
     key: 'archer', name: 'Perro Arquero', desc: 'Rápido y barato', projectileEmoji: '🦴', cost: 50,
-    dmg: 9, rate: 1.8, range: 20.4, color: '#ffb84d',
+    dmg: 4, rate: 1.8, range: 10.2, color: '#ffb84d',
   },
   cannon: {
     key: 'cannon', name: 'Perro Bomba', desc: 'Daño en área', projectileEmoji: '💣', cost: 90,
-    dmg: 26, rate: 0.6, range: 16.8, splash: 2.3, color: '#7ddb52',
+    dmg: 13, rate: 0.6, range: 8.4, splash: 2.3, color: '#7ddb52',
   },
   frost: {
     key: 'frost', name: 'Perro Mago Hielo', desc: 'Ralentiza enemigos', projectileEmoji: '❄️', cost: 70,
-    dmg: 5, rate: 1.1, range: 18.6, slow: { factor: 0.5, duration: 1.6 }, color: '#7fd8ff',
+    dmg: 2, rate: 1.1, range: 9.3, slow: { factor: 0.5, duration: 1.6 }, color: '#7fd8ff',
   },
-  normaldog: { key: 'dog_runner', name: 'Normal Dog', desc: 'Unidad inicial económica', projectileEmoji: '🐾', cost: 50, dmg: 24, rate: 1 / 1.8, range: 12, color: '#d8d8d8' },
-  sneaker: { key: 'sneaker', name: 'Sneaker Dog', desc: 'Cada quinto golpe hace daño crítico', projectileEmoji: '👟', cost: 100, dmg: 36, rate: 1 / 1.2, range: 12, color: '#ffb84d' },
-  boxer: { key: 'boxer', name: 'Boxer Dog', desc: '20% de probabilidad de aturdir', projectileEmoji: '🥊', cost: 150, dmg: 105, rate: 1 / 2.8, range: 15, color: '#e76b55' },
-  sunflower: { key: 'sunflower', name: 'Sunflower Dog', desc: 'Genera 15 monedas cada 10 segundos', projectileEmoji: '🌻', cost: 175, dmg: 15, rate: 1 / 2.5, range: 15, color: '#f5d547' },
-  bard: { key: 'bard', name: 'Bard Dog', desc: 'Aumenta 15% la velocidad de ataque cercana', projectileEmoji: '🎵', cost: 250, dmg: 24, rate: 1 / 2.2, range: 18, color: '#b77bdf' },
-  bubble: { key: 'bubble', name: 'Bubble Dog', desc: 'Cada cuarto ataque inmoviliza brevemente', projectileEmoji: '🫧', cost: 300, dmg: 45, rate: 1 / 3.2, range: 15, color: '#71d9ef' },
-  firemage: { key: 'firemage', name: 'Fire Mage Dog', desc: 'Daño en área y quemadura', projectileEmoji: '🔥', cost: 350, dmg: 165, rate: 1 / 3.8, range: 21, splash: 1.8, color: '#ff653b' },
-  crystal: { key: 'crystal', name: 'Crystal Dog', desc: 'Ralentiza a los enemigos', projectileEmoji: '💎', cost: 400, dmg: 90, rate: 1 / 2.8, range: 18, slow: { factor: 0.65, duration: 2 }, color: '#7fd8ff' },
-  electrician: { key: 'electrician', name: 'Electrician Dog', desc: 'El rayo rebota hasta a 3 enemigos', projectileEmoji: '⚡', cost: 500, dmg: 120, rate: 1 / 2.5, range: 21, color: '#ffe45e' },
-  mecha: { key: 'mecha', name: 'Mecha Dog', desc: 'Cada cuarto ataque dispara dos proyectiles', projectileEmoji: '🤖', cost: 750, dmg: 330, rate: 1 / 4.5, range: 27, splash: 0.8, color: '#8ba5bb' },
-  mummy: { key: 'mummy', name: 'Mummy Dog', desc: 'Reduce 50% la velocidad del objetivo', projectileEmoji: '🧻', cost: 225, dmg: 60, rate: 1 / 3, range: 15, slow: { factor: 0.5, duration: 1.5 }, color: '#c9bd8c' },
+  normaldog: { key: 'dog_runner', name: 'Normal Dog', desc: 'Unidad inicial económica', projectileEmoji: '🐾', cost: 50, dmg: 12, rate: 1 / 1.8, range: 6, color: '#d8d8d8' },
+  sneaker: { key: 'sneaker', name: 'Sneaker Dog', desc: 'Cada quinto golpe hace daño crítico', projectileEmoji: '👟', cost: 100, dmg: 18, rate: 1 / 1.2, range: 6, color: '#ffb84d' },
+  boxer: { key: 'boxer', name: 'Boxer Dog', desc: '20% de probabilidad de aturdir', projectileEmoji: '🥊', cost: 150, dmg: 52, rate: 1 / 2.8, range: 7.5, color: '#e76b55' },
+  sunflower: { key: 'sunflower', name: 'Sunflower Dog', desc: 'Genera 15 monedas cada 10 segundos', projectileEmoji: '🌻', cost: 175, dmg: 7, rate: 1 / 2.5, range: 7.5, color: '#f5d547' },
+  bard: { key: 'bard', name: 'Bard Dog', desc: 'Aumenta 15% la velocidad de ataque cercana', projectileEmoji: '🎵', cost: 250, dmg: 12, rate: 1 / 2.2, range: 9, color: '#b77bdf' },
+  bubble: { key: 'bubble', name: 'Bubble Dog', desc: 'Cada cuarto ataque inmoviliza brevemente', projectileEmoji: '🫧', cost: 300, dmg: 22, rate: 1 / 3.2, range: 7.5, color: '#71d9ef' },
+  firemage: { key: 'firemage', name: 'Fire Mage Dog', desc: 'Daño en área y quemadura', projectileEmoji: '🔥', cost: 350, dmg: 82, rate: 1 / 3.8, range: 10.5, splash: 1.8, color: '#ff653b' },
+  crystal: { key: 'crystal', name: 'Crystal Dog', desc: 'Ralentiza a los enemigos', projectileEmoji: '💎', cost: 400, dmg: 45, rate: 1 / 2.8, range: 9, slow: { factor: 0.65, duration: 2 }, color: '#7fd8ff' },
+  electrician: { key: 'electrician', name: 'Electrician Dog', desc: 'El rayo rebota hasta a 3 enemigos', projectileEmoji: '⚡', cost: 500, dmg: 60, rate: 1 / 2.5, range: 10.5, color: '#ffe45e' },
+  mecha: { key: 'mecha', name: 'Mecha Dog', desc: 'Cada cuarto ataque dispara dos proyectiles', projectileEmoji: '🤖', cost: 750, dmg: 165, rate: 1 / 4.5, range: 13.5, splash: 0.8, color: '#8ba5bb' },
+  mummy: { key: 'mummy', name: 'Mummy Dog', desc: 'Reduce 50% la velocidad del objetivo', projectileEmoji: '🧻', cost: 225, dmg: 30, rate: 1 / 3, range: 7.5, slow: { factor: 0.5, duration: 1.5 }, color: '#c9bd8c' },
 };
 
 export const TOWER_ORDER = [

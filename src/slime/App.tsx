@@ -1,13 +1,53 @@
 // ─────────────────────────────────────────────────────────────
 // App.tsx — HUD del juego (React) sobre el canvas 3D.
 // ─────────────────────────────────────────────────────────────
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type SyntheticEvent } from 'react';
 import './App.css';
 import { audio } from './game/audio';
 import { TOWERS, TOWER_ORDER, VICTORY_WAVE } from './game/config';
 import { GameEngine, type GameStats, type TowerInfo } from './game/engine';
 
 const SPRITE = (k: string) => `${import.meta.env.BASE_URL}sprites/${k}.png`;
+const SPRITE_FALLBACKS: Record<string, string> = {
+  normaldog: 'dog_runner',
+  sneaker: 'dog_runner',
+  dog_runner: 'normaldog',
+  boxer: 'dog_boxer',
+  dog_boxer: 'boxer',
+  sunflower: 'dog_flower',
+  dog_flower: 'sunflower',
+  bard: 'dog_bard',
+  dog_bard: 'bard',
+  bubble: 'dog_bubble',
+  dog_bubble: 'bubble',
+  firemage: 'dog_mage',
+  dog_mage: 'firemage',
+  crystal: 'dog_star',
+  dog_star: 'crystal',
+  electrician: 'dog_worker',
+  dog_worker: 'electrician',
+  mecha: 'dog_cyborg',
+  dog_cyborg: 'mecha',
+  mummy: 'dog_mummy',
+  dog_mummy: 'mummy',
+};
+
+function recoverSprite(event: SyntheticEvent<HTMLImageElement>, key: string) {
+  const img = event.currentTarget;
+  const fallback = SPRITE_FALLBACKS[key] ?? 'dog_runner';
+  if (!img.dataset.spriteRetry) {
+    img.dataset.spriteRetry = 'alias';
+    img.src = SPRITE(fallback);
+    return;
+  }
+  if (img.dataset.spriteRetry === 'alias') {
+    img.dataset.spriteRetry = 'root';
+    img.src = `/sprites/${fallback}.png`;
+    return;
+  }
+  img.onerror = null;
+  img.style.visibility = 'hidden';
+}
 
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -89,9 +129,9 @@ export default function App() {
             </h1>
             <p className="game-subtitle">Defensa de torres del Reino Gelatina</p>
             <div className="menu-chars">
-              <img src={SPRITE('dog_runner')} alt="Normal Dog" />
-              <img src={SPRITE('slime')} alt="Slime" />
-              <img src={SPRITE('firemage')} alt="Fire Mage Dog" />
+              <img src={SPRITE('dog_runner')} onError={(event) => recoverSprite(event, 'dog_runner')} alt="Normal Dog" />
+              <img src={SPRITE('slime')} onError={(event) => recoverSprite(event, 'slime')} alt="Slime" />
+              <img src={SPRITE('firemage')} onError={(event) => recoverSprite(event, 'firemage')} alt="Fire Mage Dog" />
             </div>
             <button className="btn-3d btn-play" onClick={begin} disabled={!ready}>
               {ready ? '¡JUGAR!' : 'Cargando…'}
@@ -161,7 +201,7 @@ export default function App() {
           {towerInfo && TOWERS[towerInfo.type] && (
             <div className="tower-popup">
               <div className="tower-popup-head">
-                <img src={SPRITE(TOWERS[towerInfo.type].key)} alt={TOWERS[towerInfo.type].name} />
+                <img src={SPRITE(TOWERS[towerInfo.type].key)} onError={(event) => recoverSprite(event, TOWERS[towerInfo.type].key)} alt={TOWERS[towerInfo.type].name} />
                 <div>
                   <strong>{TOWERS[towerInfo.type].name}</strong>
                   <span className="tower-popup-sub">
@@ -206,7 +246,7 @@ export default function App() {
                   className={`tower-card ${selectedType === key ? 'selected' : ''} ${affordable ? '' : 'cant-afford'}`}
                   onClick={() => pickTower(key)}
                 >
-                  <img src={SPRITE(def.key)} alt={def.name} draggable={false} />
+                  <img src={SPRITE(def.key)} onError={(event) => recoverSprite(event, def.key)} alt={def.name} draggable={false} />
                   <div className="tower-card-info">
                     <strong>{def.name}</strong>
                     <span className="tower-desc">{def.desc}</span>
@@ -231,7 +271,7 @@ export default function App() {
               <div className="end-panel victory-panel">
                 <h2>¡VICTORIA!</h2>
                 <p>Has defendido el Reino Gelatina durante {VICTORY_WAVE} oleadas.</p>
-                <img className="end-img" src={SPRITE('golem')} alt="Gólem derrotado" />
+                <img className="end-img" src={SPRITE('golem')} onError={(event) => recoverSprite(event, 'golem')} alt="Gólem derrotado" />
                 <div className="end-actions">
                   <button className="btn-3d btn-play" onClick={() => engineRef.current?.continueEndless()}>
                     Modo Infinito ∞
