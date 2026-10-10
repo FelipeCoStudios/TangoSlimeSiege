@@ -7,13 +7,14 @@ import { audio } from './game/audio';
 import { TOWERS, TOWER_ORDER, VICTORY_WAVE } from './game/config';
 import { GameEngine, type GameStats, type TowerInfo } from './game/engine';
 
-const SPRITE = (k: string) => `${import.meta.env.BASE_URL}sprites/${k.startsWith('tower_') ? `${k}.svg` : `${k}.png`}`;
+const SPRITE = (k: string) => `${import.meta.env.BASE_URL}sprites/${k.startsWith('tower_') ? `${k}.svg` : k === 'boxer_portrait' ? 'boxer_portrait.webp' : `${k}.png`}`;
 const SPRITE_FALLBACKS: Record<string, string> = {
   normaldog: 'dog_runner',
   sneaker: 'dog_runner',
   dog_runner: 'normaldog',
   boxer: 'dog_boxer',
   dog_boxer: 'boxer',
+  boxer_portrait: 'dog_boxer',
   sunflower: 'dog_flower',
   dog_flower: 'sunflower',
   bard: 'dog_bard',
