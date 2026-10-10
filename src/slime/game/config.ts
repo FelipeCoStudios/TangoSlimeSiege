@@ -61,7 +61,7 @@ export const TOWERS: Record<string, TowerDef> = {
   },
   normaldog: { key: 'dog_runner', name: 'Normal Dog', desc: 'Unidad inicial económica', projectileEmoji: '🐾', cost: 60, dmg: 12, rate: 1 / 1.8, range: 6, color: '#d8d8d8' },
   sneaker: { key: 'sneaker', name: 'Sneaker Dog', desc: 'Cada quinto golpe hace daño crítico', projectileEmoji: '👟', cost: 120, dmg: 18, rate: 1 / 1.2, range: 6, color: '#ffb84d' },
-  boxer: { key: 'dog_boxer', name: 'Boxer Dog', desc: '20% de probabilidad de aturdir', projectileEmoji: '🥊', cost: 180, dmg: 52, rate: 1 / 2.8, range: 7.5, color: '#e76b55' },
+  boxer: { key: 'boxer_portrait', name: 'Boxer Dog', desc: '20% de probabilidad de aturdir', projectileEmoji: '🥊', cost: 180, dmg: 52, rate: 1 / 2.8, range: 7.5, color: '#e76b55' },
   sunflower: { key: 'dog_flower', name: 'Sunflower Dog', desc: 'Genera 150 monedas cada 10 segundos', projectileEmoji: '🌻', cost: 210, dmg: 7, rate: 1 / 2.5, range: 7.5, color: '#f5d547' },
   bard: { key: 'dog_bard', name: 'Bard Dog', desc: 'Aumenta 15% la velocidad de ataque cercana', projectileEmoji: '🎵', cost: 300, dmg: 12, rate: 1 / 2.2, range: 9, color: '#b77bdf' },
   bubble: { key: 'dog_bubble', name: 'Bubble Dog', desc: 'Cada cuarto ataque inmoviliza brevemente', projectileEmoji: '🫧', cost: 360, dmg: 22, rate: 1 / 3.2, range: 7.5, color: '#71d9ef' },
