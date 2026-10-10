@@ -3,7 +3,7 @@ import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import appCss from "../styles.css?url";
 
-const APP_NAME = "Slime Siege";
+const APP_NAME = "Pollito Defense";
 
 export const Route = createRootRoute({
   head: () => ({
