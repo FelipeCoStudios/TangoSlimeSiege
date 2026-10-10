@@ -152,7 +152,7 @@ export function snowflakeTexture(): THREE.CanvasTexture {
 export type SpriteKey =
   | 'slime' | 'goblin' | 'mushroom' | 'golem'
   | 'archer' | 'cannon' | 'frost'
-  | 'dog_runner' | 'dog_flower' | 'dog_boxer' | 'dog_bard' | 'dog_mage'
+  | 'dog_runner' | 'dog_flower' | 'dog_boxer' | 'dog_bard' | 'dog_mage' | 'boxer_portrait'
   | 'dog_bubble' | 'dog_cyborg' | 'dog_star' | 'dog_mummy' | 'dog_worker'
   | 'normaldog' | 'sneaker' | 'boxer' | 'sunflower' | 'bard' | 'bubble'
   | 'firemage' | 'crystal' | 'electrician' | 'mecha' | 'mummy'
@@ -164,6 +164,7 @@ const SPRITE_FALLBACKS: Partial<Record<SpriteKey, SpriteKey>> = {
   dog_runner: 'normaldog',
   boxer: 'dog_boxer',
   dog_boxer: 'boxer',
+  boxer_portrait: 'dog_boxer',
   sunflower: 'dog_flower',
   dog_flower: 'sunflower',
   bard: 'dog_bard',
@@ -214,7 +215,7 @@ export async function loadCharacterTextures(): Promise<Record<SpriteKey, THREE.T
   const loader = new THREE.TextureLoader();
   const keys: SpriteKey[] = [
     'slime', 'goblin', 'mushroom', 'golem', 'archer', 'cannon', 'frost',
-    'dog_runner', 'dog_flower', 'dog_boxer', 'dog_bard', 'dog_mage',
+    'dog_runner', 'dog_flower', 'dog_boxer', 'dog_bard', 'dog_mage', 'boxer_portrait',
     'dog_bubble', 'dog_cyborg', 'dog_star', 'dog_mummy', 'dog_worker',
     'normaldog', 'sneaker', 'boxer', 'sunflower', 'bard', 'bubble',
     'firemage', 'crystal', 'electrician', 'mecha', 'mummy',
@@ -222,7 +223,7 @@ export async function loadCharacterTextures(): Promise<Record<SpriteKey, THREE.T
   ];
 
   // Las cuatro torres problemáticas usan ilustraciones SVG independientes.
-  const spriteFile = (key: SpriteKey) => key.startsWith('tower_') ? `${key}.svg` : `${key}.png`;
+  const spriteFile = (key: SpriteKey) => key.startsWith('tower_') ? `${key}.svg` : key === 'boxer_portrait' ? 'boxer_portrait.webp' : `${key}.png`;
 
   // Una imagen defectuosa no debe bloquear el resto del juego.
   const entries = await Promise.all(keys.map(async (key): Promise<[SpriteKey, THREE.Texture]> => {
