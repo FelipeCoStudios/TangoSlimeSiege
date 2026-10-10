@@ -117,7 +117,8 @@ export default function App() {
 
   const gold = stats?.gold ?? 0;
   const waveInProgress = stats?.waveInProgress ?? false;
-  const gameOver = stats?.gameOver ?? false;
+  // Use the life counter as a UI-side safety net if the engine flag ever gets out of sync.
+  const gameOver = !!stats && (stats.gameOver || stats.lives <= 0);
   const victory = stats?.victory ?? false;
 
   return (
