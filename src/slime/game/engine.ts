@@ -224,7 +224,15 @@ export class GameEngine {
   private tick(dt: number) {
     dt *= this.speed; this.elapsed += dt;
     if (this.phase === 'over') { this.world.renderer.render(this.world.scene, this.world.camera); return; }
-    this.updateSpawns(dt); this.updateEnemies(dt); this.updateTowers(dt); this.updateProjectiles(dt);
+    this.updateSpawns(dt);
+    this.updateEnemies(dt);
+    // Stop all simulation immediately on defeat. Do not let towers/projectiles
+    // run after the terminal state or allow the wave-completion logic to override it.
+    if (this.phase === 'over') {
+      this.world.renderer.render(this.world.scene, this.world.camera);
+      return;
+    }
+    this.updateTowers(dt); this.updateProjectiles(dt);
     for (const t of this.towers) {
       if (t.popAnim > 0) {
         t.popAnim += dt * 4;
