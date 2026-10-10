@@ -413,6 +413,10 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
+
+  useEffect(() => {
     const container = containerRef.current!;
     const overlay = overlayRef.current!;
     const engine = new GameEngine(container, overlay, {
@@ -428,7 +432,7 @@ export default function App() {
         if (t) setSelectedType(null);
       },
       onToast: (msg) => {
-        setToast(localizeToast(msg));
+        setToast(msg);
         if (toastTimer.current) window.clearTimeout(toastTimer.current);
         toastTimer.current = window.setTimeout(() => setToast(null), 2200);
       },
@@ -595,7 +599,7 @@ export default function App() {
               <div className="tower-popup-head">
                 <img src={SPRITE(TOWERS[towerInfo.type].key)} onError={(event) => recoverSprite(event, TOWERS[towerInfo.type].key)} alt={TOWERS[towerInfo.type].name} />
                 <div>
-                  <strong>{TOWERS[towerInfo.type].name}</strong>
+                  <strong>{t('tower_' + towerInfo.type)}</strong>
                   <span className="tower-popup-sub">
                     {t('level')} {towerInfo.level} · {t('damage')} {towerInfo.dmg} · {t('range')} {towerInfo.range}
                   </span>
@@ -656,7 +660,7 @@ export default function App() {
             <div className="hint-bar">{t('buildHint')}</div>
           )}
 
-          {toast && <div className="toast">{toast}</div>}
+          {toast && <div className="toast">{localizeToast(toast)}</div>}
 
           {victory && !gameOver && (
             <div className="end-screen">
