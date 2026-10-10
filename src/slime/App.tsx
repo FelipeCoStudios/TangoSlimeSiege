@@ -129,8 +129,8 @@ export default function App() {
         <div className="menu-screen">
           <div className="menu-panel">
             <h1 className="game-title">
-              <span>POLLITO</span>
-              <span className="title-alt">DEFENSE</span>
+              <span>TANGO</span>
+              <span className="title-alt">MAYHEM</span>
             </h1>
             <p className="game-subtitle">¡Defiende tu reino con tus pollitos favoritos!</p>
             <div className="menu-chars">
@@ -274,7 +274,7 @@ export default function App() {
           {victory && !gameOver && (
             <div className="end-screen">
               <div className="end-panel victory-panel">
-                <h2 className="end-game-title">POLLITO DEFENSE</h2>
+                <h2 className="end-game-title">TANGO MAYHEM</h2>
                 <p className="end-status">¡VICTORIA!</p>
                 <p>Has defendido el Reino Gelatina durante {VICTORY_WAVE} oleadas.</p>
                 <div className="menu-chars end-chars">
@@ -297,7 +297,7 @@ export default function App() {
           {gameOver && (
             <div className="end-screen">
               <div className="end-panel">
-                <h2 className="end-game-title">POLLITO DEFENSE</h2>
+                <h2 className="end-game-title">TANGO MAYHEM</h2>
                 <p className="end-status">¡EL CASTILLO HA CAÍDO!</p>
                 <p>Sobreviviste hasta la oleada {stats.wave}.</p>
                 <div className="end-actions">
