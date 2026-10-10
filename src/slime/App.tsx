@@ -62,6 +62,7 @@ export default function App() {
   const [ready, setReady] = useState(false);
   const [started, setStarted] = useState(false);
   const [stats, setStats] = useState<GameStats | null>(null);
+  const [gameOverForced, setGameOverForced] = useState(false);
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [towerInfo, setTowerInfo] = useState<TowerInfo | null>(null);
   const [toast, setToast] = useState<string | null>(null);
@@ -73,7 +74,13 @@ export default function App() {
     const container = containerRef.current!;
     const overlay = overlayRef.current!;
     const engine = new GameEngine(container, overlay, {
-      onStats: (s) => setStats(s),
+      onStats: (s) => {
+        setStats(s);
+        const ended = s.gameOver || s.lives <= 0;
+        setGameOverForced(ended);
+        // Keep the React game layer mounted even if started and engine state drift apart.
+        if (ended) setStarted(true);
+      },
       onTowerSelected: (t) => {
         setTowerInfo(t);
         if (t) setSelectedType(null);
@@ -118,7 +125,7 @@ export default function App() {
   const gold = stats?.gold ?? 0;
   const waveInProgress = stats?.waveInProgress ?? false;
   // Use the life counter as a UI-side safety net if the engine flag ever gets out of sync.
-  const gameOver = !!stats && (stats.gameOver || stats.lives <= 0);
+  const gameOver = gameOverForced || (!!stats && (stats.gameOver || stats.lives <= 0));
   const victory = stats?.victory ?? false;
 
   return (
