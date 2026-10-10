@@ -11,15 +11,25 @@ const SPRITE = (k: string) => `${import.meta.env.BASE_URL}sprites/${k}.png`;
 const SPRITE_FALLBACKS: Record<string, string> = {
   normaldog: 'dog_runner',
   sneaker: 'dog_runner',
+  dog_runner: 'normaldog',
   boxer: 'dog_boxer',
+  dog_boxer: 'boxer',
   sunflower: 'dog_flower',
+  dog_flower: 'sunflower',
   bard: 'dog_bard',
+  dog_bard: 'bard',
   bubble: 'dog_bubble',
+  dog_bubble: 'bubble',
   firemage: 'dog_mage',
+  dog_mage: 'firemage',
   crystal: 'dog_star',
+  dog_star: 'crystal',
   electrician: 'dog_worker',
+  dog_worker: 'electrician',
   mecha: 'dog_cyborg',
+  dog_cyborg: 'mecha',
   mummy: 'dog_mummy',
+  dog_mummy: 'mummy',
 };
 
 function recoverSprite(event: SyntheticEvent<HTMLImageElement>, key: string) {
