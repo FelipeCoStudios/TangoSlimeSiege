@@ -89,7 +89,7 @@ export default function App() {
             </h1>
             <p className="game-subtitle">Defensa de torres del Reino Gelatina</p>
             <div className="menu-chars">
-              <img src={SPRITE('normaldog')} alt="Normal Dog" />
+              <img src={SPRITE('dog_runner')} alt="Normal Dog" />
               <img src={SPRITE('slime')} alt="Slime" />
               <img src={SPRITE('firemage')} alt="Fire Mage Dog" />
             </div>

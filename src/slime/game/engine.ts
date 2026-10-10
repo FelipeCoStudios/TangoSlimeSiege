@@ -5,7 +5,7 @@ import {
   earlyWaveBonus, hpScale, spawnInterval, upgradeCost, waveComposition,
 } from './config';
 import { Effects } from './effects';
-import { arrowTexture, loadCharacterTextures, snowflakeTexture, circleTexture, type SpriteKey } from './textures';
+import { emojiTexture, loadCharacterTextures, type SpriteKey } from './textures';
 import { createWorld, type PadMesh, type WorldRefs } from './world';
 import { Enemy, Tower, type Projectile, type GameStats, type TowerInfo, posAtDistance } from './entities';
 
@@ -15,7 +15,7 @@ export { posAtDistance };
 export class GameEngine {
   private world!: WorldRefs; private effects!: Effects;
   private chars!: Record<SpriteKey, THREE.Texture>;
-  private texArrow!: THREE.Texture; private texSnow!: THREE.Texture; private texBall!: THREE.Texture;
+  private projectileTextures = new Map<string, THREE.Texture>();
   private enemies: Enemy[] = []; private towers: Tower[] = []; private projectiles: Projectile[] = [];
   private spawnQueue: string[] = []; private spawnTimer = 0; private phase: 'idle' | 'spawning' | 'fighting' | 'over' = 'idle';
   private gold = START_GOLD; private lives = START_LIVES; private wave = 0; private speed = 1;
@@ -36,7 +36,6 @@ export class GameEngine {
     if (this.disposed) return;
     this.world = createWorld(this.container);
     this.effects = new Effects(this.world.scene, this.overlay);
-    this.texArrow = arrowTexture(); this.texSnow = snowflakeTexture(); this.texBall = circleTexture('#2e2e2e');
     this.camBase.copy(this.world.camera.position);
     this.resize();
     window.addEventListener('resize', this.resize);
@@ -59,6 +58,8 @@ export class GameEngine {
     if (this.raf) cancelAnimationFrame(this.raf);
     window.removeEventListener('resize', this.resize);
     this.effects?.dispose();
+    for (const texture of this.projectileTextures.values()) texture.dispose();
+    this.projectileTextures.clear();
     const renderer = this.world?.renderer;
     if (!renderer) return;
     renderer.domElement.removeEventListener('pointerdown', this.onPointerDown);
@@ -309,10 +310,20 @@ export class GameEngine {
     }
   }
 
+  private getProjectileTexture(emoji: string): THREE.Texture {
+    const cached = this.projectileTextures.get(emoji);
+    if (cached) return cached;
+    const texture = emojiTexture(emoji);
+    this.projectileTextures.set(emoji, texture);
+    return texture;
+  }
+
   private fireProjectile(t: Tower, target: Enemy) {
     const def = t.def;
     const from = t.group.position.clone().add(new THREE.Vector3(0, 2.2, 0));
     const shotNumber = t.shotsFired;
+    const texture = this.getProjectileTexture(def.projectileEmoji);
+
     if (def.splash) {
       audio.cannon();
       this.effects.shake(0.15, 0.12);
@@ -320,10 +331,12 @@ export class GameEngine {
       const count = doubleShot ? 2 : 1;
       const dmg = doubleShot ? Math.round(t.dmg * 0.7) : t.dmg;
       for (let i = 0; i < count; i++) {
-        const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.texBall, transparent: true, depthWrite: false }));
-        sprite.scale.setScalar(0.65);
+        const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false }));
+        sprite.scale.setScalar(0.95);
         const offset = count === 2 ? (i === 0 ? -0.18 : 0.18) : 0;
         const start = from.clone().add(new THREE.Vector3(offset, 0, offset));
+        // Set the launch position immediately; without this, sprites begin at world origin.
+        sprite.position.copy(start);
         this.projectiles.push({
           kind: 'ball', sprite, from: start, to: target.sprite.position.clone(), target: null,
           t: 0, duration: 0.55, dmg, splash: def.splash,
@@ -333,8 +346,9 @@ export class GameEngine {
       }
     } else if (def.slow) {
       audio.frost();
-      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.texSnow, transparent: true, depthWrite: false }));
-      sprite.scale.setScalar(0.9);
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false }));
+      sprite.scale.setScalar(0.95);
+      sprite.position.copy(from);
       this.projectiles.push({
         kind: 'frost', sprite, from, to: new THREE.Vector3(), target, t: 0, duration: 0,
         dmg: t.dmg, slow: def.slow, towerKey: t.defKey, towerId: t.id, shotNumber, alive: true,
@@ -342,8 +356,9 @@ export class GameEngine {
       this.world.scene.add(sprite);
     } else {
       audio.shoot();
-      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.texArrow, transparent: true, depthWrite: false }));
-      sprite.scale.set(1.4, 0.35, 1);
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false }));
+      sprite.scale.setScalar(0.95);
+      sprite.position.copy(from);
       const critical = t.defKey === 'sneaker' && shotNumber % 5 === 0;
       this.projectiles.push({
         kind: 'arrow', sprite, from, to: new THREE.Vector3(), target, t: 0, duration: 0,
@@ -375,10 +390,6 @@ export class GameEngine {
       if (dist < 0.45) { this.hitEnemy(p, target); continue; }
       dir.normalize();
       p.sprite.position.addScaledVector(dir, Math.min(speed * dt, dist));
-      const a = this.worldToScreen(p.sprite.position);
-      const b = this.worldToScreen(p.sprite.position.clone().add(dir));
-      p.sprite.material.rotation = Math.atan2(-(b.y - a.y), b.x - a.x);
-      if (p.kind === 'frost') p.sprite.material.rotation += this.elapsed * 2;
     }
     this.projectiles = this.projectiles.filter((p) => p.alive);
   }

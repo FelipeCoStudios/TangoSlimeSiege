@@ -77,6 +77,18 @@ export function coinTexture(): THREE.CanvasTexture {
   return toTexture(c);
 }
 
+export function emojiTexture(emoji: string): THREE.CanvasTexture {
+  const { c, ctx } = makeCanvas(128);
+  ctx.clearRect(0, 0, 128, 128);
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font = '100px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+  ctx.shadowColor = 'rgba(25, 20, 12, 0.28)';
+  ctx.shadowBlur = 8;
+  ctx.fillText(emoji, 64, 66);
+  return toTexture(c);
+}
+
 export function arrowTexture(): THREE.CanvasTexture {
   const c = document.createElement('canvas');
   c.width = 128;
