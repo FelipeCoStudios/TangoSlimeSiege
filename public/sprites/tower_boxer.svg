@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs>
+ <linearGradient id="fur" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe7b3"/><stop offset="1" stop-color="#c98753"/></linearGradient>
+ <linearGradient id="red" x1="0" y1="0" x2="0.8" y2="1"><stop stop-color="#ff6565"/><stop offset="1" stop-color="#b82238"/></linearGradient>
+ <linearGradient id="shirt" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ef5350"/><stop offset="1" stop-color="#9d2135"/></linearGradient>
+</defs>
+<ellipse cx="258" cy="466" rx="140" ry="22" fill="#382a35" opacity=".18"/>
+<!-- body and paws -->
+<path d="M163 334 Q170 300 214 294 L299 294 Q348 307 355 365 L343 438 Q335 457 305 450 L293 404 L220 404 L208 450 Q178 458 166 438 Z" fill="url(#fur)" stroke="#573a31" stroke-width="12" stroke-linejoin="round"/>
+<path d="M204 315 Q254 340 310 315 L329 400 L184 400 Z" fill="url(#shirt)" stroke="#573a31" stroke-width="10" stroke-linejoin="round"/>
+<path d="M225 404 L225 440 M289 404 L289 440" stroke="#573a31" stroke-width="9" stroke-linecap="round"/>
+<path d="M206 438 Q220 425 240 440 L245 455 Q226 471 201 456 Z M279 440 Q300 425 318 441 L322 457 Q300 471 278 456 Z" fill="#ffe7c0" stroke="#573a31" stroke-width="9"/>
+<!-- ears and head -->
+<path d="M171 174 Q121 151 121 220 Q124 270 174 275 L207 231 Z" fill="#a95d3a" stroke="#573a31" stroke-width="12"/>
+<path d="M341 174 Q391 151 391 220 Q388 270 338 275 L305 231 Z" fill="#a95d3a" stroke="#573a31" stroke-width="12"/>
+<path d="M146 193 Q157 197 166 226 M366 193 Q355 197 346 226" fill="none" stroke="#e9a57c" stroke-width="11" stroke-linecap="round"/>
+<path d="M162 157 Q177 91 256 92 Q336 90 352 158 L348 244 Q337 310 257 318 Q177 310 164 244 Z" fill="url(#fur)" stroke="#573a31" stroke-width="13"/>
+<!-- forehead stripe -->
+<path d="M243 105 Q257 139 257 178" fill="none" stroke="#fff4dc" stroke-width="14" stroke-linecap="round"/>
+<!-- headband -->
+<path d="M165 154 Q256 187 350 153 L352 179 Q256 210 163 180 Z" fill="url(#red)" stroke="#573a31" stroke-width="9"/>
+<path d="M185 160 Q256 185 332 159" fill="none" stroke="#ffb2a8" stroke-width="7" stroke-linecap="round"/>
+<!-- eyes and muzzle -->
+<ellipse cx="214" cy="222" rx="12" ry="18" fill="#382a35"/><ellipse cx="298" cy="222" rx="12" ry="18" fill="#382a35"/>
+<circle cx="218" cy="216" r="4" fill="#fff"/><circle cx="302" cy="216" r="4" fill="#fff"/>
+<ellipse cx="256" cy="256" rx="47" ry="35" fill="#fff5df" stroke="#573a31" stroke-width="8"/>
+<ellipse cx="256" cy="246" rx="17" ry="12" fill="#382a35"/><path d="M256 257 L256 270 Q242 283 230 269 M256 270 Q270 283 282 269" fill="none" stroke="#573a31" stroke-width="7" stroke-linecap="round"/>
+<!-- raised gloves -->
+<path d="M178 325 Q151 307 141 282 L130 254 Q129 230 153 225 Q177 222 188 243 L204 275 Q213 301 207 323 Z" fill="url(#fur)" stroke="#573a31" stroke-width="11"/>
+<path d="M134 251 Q114 221 139 199 Q164 184 185 205 L198 225 Q204 246 184 262 L162 274 Q144 271 134 251 Z" fill="url(#red)" stroke="#573a31" stroke-width="12"/>
+<path d="M139 225 Q160 211 181 231 M142 242 Q163 229 189 246" fill="none" stroke="#ffb2a8" stroke-width="8" stroke-linecap="round"/>
+<path d="M327 330 Q354 313 369 290 L384 265 Q396 245 418 256 Q438 270 426 291 L406 328 Q388 353 357 357 Z" fill="url(#fur)" stroke="#573a31" stroke-width="11"/>
+<path d="M382 262 Q386 235 412 231 Q439 231 448 257 L446 281 Q439 304 414 304 Q390 300 382 279 Z" fill="url(#red)" stroke="#573a31" stroke-width="12"/>
+<path d="M395 255 Q417 245 438 261 M392 273 Q416 264 442 280" fill="none" stroke="#ffb2a8" stroke-width="8" stroke-linecap="round"/>
+</svg>
