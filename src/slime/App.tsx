@@ -69,6 +69,39 @@ export default function App() {
   const [musicOn, setMusicOn] = useState(true);
   const [sfxOn, setSfxOn] = useState(true);
   const toastTimer = useRef<number | null>(null);
+  const bgMusicRef = useRef<HTMLAudioElement | null>(null);
+  const musicEnabledRef = useRef(true);
+
+  // Reproduce music2.mp3 tras el primer clic (requisito de los navegadores).
+  // Si el archivo todavía no existe o falla, se conserva la música sintetizada.
+  useEffect(() => {
+    const track = new Audio(`${import.meta.env.BASE_URL}music2.mp3`);
+    track.loop = true;
+    track.volume = 0.3;
+    bgMusicRef.current = track;
+
+    const fallbackToSynth = () => {
+      if (musicEnabledRef.current) audio.setMusic(true);
+    };
+    const startTrack = () => {
+      if (!musicEnabledRef.current) return;
+      void track.play()
+        .then(() => audio.setMusic(false))
+        .catch(fallbackToSynth);
+    };
+
+    track.addEventListener('error', fallbackToSynth);
+    document.addEventListener('click', startTrack, { once: true });
+
+    return () => {
+      document.removeEventListener('click', startTrack);
+      track.removeEventListener('error', fallbackToSynth);
+      track.pause();
+      track.removeAttribute('src');
+      track.load();
+      bgMusicRef.current = null;
+    };
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current!;
@@ -112,6 +145,7 @@ export default function App() {
 
   const begin = () => {
     audio.init();
+    audio.setMusic(false); // La pista externa sustituye la música sintetizada cuando carga.
     setStarted(true);
     engineRef.current?.startGame();
   };
@@ -185,7 +219,18 @@ export default function App() {
                 onClick={() => {
                   const v = !musicOn;
                   setMusicOn(v);
-                  audio.setMusic(v);
+                  musicEnabledRef.current = v;
+                  const track = bgMusicRef.current;
+                  if (!v) {
+                    track?.pause();
+                    audio.setMusic(false);
+                  } else if (track) {
+                    void track.play()
+                      .then(() => audio.setMusic(false))
+                      .catch(() => audio.setMusic(true));
+                  } else {
+                    audio.setMusic(true);
+                  }
                 }}
                 aria-label="Música"
               >

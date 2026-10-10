@@ -29,7 +29,7 @@ class AudioEngine {
     this.master.gain.value = 0.55;
     this.master.connect(this.ctx.destination);
     this.musicBus = this.ctx.createGain();
-    this.musicBus.gain.value = 0.4;
+    this.musicBus.gain.value = this.musicOn ? 0.4 : 0;
     this.musicBus.connect(this.master);
     this.sfxBus = this.ctx.createGain();
     this.sfxBus.gain.value = 0.9;
