@@ -128,10 +128,10 @@ export default function App() {
         <div className="menu-screen">
           <div className="menu-panel">
             <h1 className="game-title">
-              <span>SLIME</span>
-              <span className="title-alt">SIEGE</span>
+              <span>POLLITO</span>
+              <span className="title-alt">DEFENSE</span>
             </h1>
-            <p className="game-subtitle">Defensa de torres del Reino Gelatina</p>
+            <p className="game-subtitle">¡Defiende tu reino con tus pollitos favoritos!</p>
             <div className="menu-chars">
               <img src={SPRITE('dog_runner')} onError={(event) => recoverSprite(event, 'dog_runner')} alt="Normal Dog" />
               <img src={SPRITE('slime')} onError={(event) => recoverSprite(event, 'slime')} alt="Slime" />
@@ -273,9 +273,14 @@ export default function App() {
           {victory && !gameOver && (
             <div className="end-screen">
               <div className="end-panel victory-panel">
-                <h2>¡VICTORIA!</h2>
+                <h2 className="end-game-title">POLLITO DEFENSE</h2>
+                <p className="end-status">¡VICTORIA!</p>
                 <p>Has defendido el Reino Gelatina durante {VICTORY_WAVE} oleadas.</p>
-                <img className="end-img" src={SPRITE('golem')} onError={(event) => recoverSprite(event, 'golem')} alt="Gólem derrotado" />
+                <div className="menu-chars end-chars">
+                  <img src={SPRITE('dog_runner')} onError={(event) => recoverSprite(event, 'dog_runner')} alt="Pollito defensor" />
+                  <img src={SPRITE('slime')} onError={(event) => recoverSprite(event, 'slime')} alt="Enemigo gelatinoso" />
+                  <img src={SPRITE('firemage')} onError={(event) => recoverSprite(event, 'firemage')} alt="Pollito mágico" />
+                </div>
                 <div className="end-actions">
                   <button className="btn-3d btn-play" onClick={() => engineRef.current?.continueEndless()}>
                     Modo Infinito ∞
@@ -291,7 +296,8 @@ export default function App() {
           {gameOver && (
             <div className="end-screen">
               <div className="end-panel">
-                <h2>¡EL CASTILLO HA CAÍDO!</h2>
+                <h2 className="end-game-title">POLLITO DEFENSE</h2>
+                <p className="end-status">¡EL CASTILLO HA CAÍDO!</p>
                 <p>Sobreviviste hasta la oleada {stats.wave}.</p>
                 <div className="end-actions">
                   <button className="btn-3d btn-play" onClick={() => engineRef.current?.restart()}>
